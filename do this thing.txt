@@ -1,0 +1,40 @@
+Jerome (new hitman) @ _____ inc (mute)
+Blake (Old hitman) @ _____ inc
+
+Jessie (new hitman) @ compitation inc
+
+Police arrival and arrest
+Mafia laughter when dead and we know your here
+
+both sound kind of corrupt
+____ inc correspondant
+compitition inc correspondant
+
+overlord (regulates both companies) (staticy distortion for voice)
+
+
+
+Chooses
+destroy competition (kill jessie)
+destroy overlord
+destroy own company (kill blake)
+
+
+majority hinting at endings + clues on overload
+towards the end youll make your choice w/ jessie
+either kill her then, go kill blake, or go get blake to take down overlord
+
+
+top down
+melee and projectile
+melee = lock-on w/ range
+projectile = time slow?
+gun without suspressor has noise area
+TODO: Look into only see what is around you not every room
+disguises to inviltrate
+if caught call reinforcements, be that police or extra mafia
+pickup and move bodies
+Enemies have sight lines
+Some enemies have body armor against guns
+
+
