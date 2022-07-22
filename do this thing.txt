@@ -46,3 +46,12 @@ potential for thwoing knife
 have gun (get fucked)
 mission w just knife
 meet jessie give a silenced pistol
+
+
+
+
+Enemy
+on hit = death
+on death => Change tag to corpse, Allow player to walk over them but have them get hit by raycast, change sprite
+on combat => Change to weapon out sprite, search surrounding area, attack on sight
+on sighting => check for disguise, if not intiate combat
