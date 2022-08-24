@@ -17,4 +17,6 @@ public class Weapons : MonoBehaviour
 
     //Returns actives for visual board
     public bool[] Actives() { return actives; }
+
+    public void SetActive(int selected) { actives[selected] = true; }
 }

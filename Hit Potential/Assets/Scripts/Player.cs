@@ -7,12 +7,13 @@ public class Player : MonoBehaviour
     [SerializeField] private float speed = 10;
     [SerializeField] private Weapons weapons;
     [SerializeField] private SpriteController sprCtrl;
+    [SerializeField] private SpriteController weaponSprCtrl;
 
-    private int activeWeapon;
-    private int stage = 0;
-    //0 - normal, 1 - combat
-    private int look = 0;
     //0 - base, 1 - mafia, 2 - police
+    private int outfit = 0;
+    private int activeWeapon;
+    private bool inCombat = false;
+    //Implement Ammo
 
     private void Start()
     {
@@ -31,6 +32,7 @@ public class Player : MonoBehaviour
         changeWeapon();
         //Attack based on selected weapon
         attack();
+        
     }
 
     private void movement()
@@ -75,16 +77,23 @@ public class Player : MonoBehaviour
         transform.up = direction;
     }
 
+    //Attack based on if it physical or projectile
     private void attack()
     {
-        //Attack based on if it physical or projectile
+        //Activate weapon if deactivated
+        if(!inCombat)
+        {
+            ActivateWeapon(true);
+        }
+        //melee attack logic
         if(activeWeapon == 0)
         {
-            //Figure out melee attack
+            //TODO: Implement Melee Attack with Knife
         }
+        //spawn projectile(s) logic
         else
         {
-            //spawn projectile(s)
+            //TODO: Generate projectile(s) based on current direction
             if(activeWeapon == 3)
             {
                 //shotgun - multiple projectiles
@@ -97,37 +106,68 @@ public class Player : MonoBehaviour
             //Sound wave if not silenced
             if(activeWeapon != 1)
             {
-
+                //TODO: Implement Sound Wave on Audio Shot
             }
         }
     }
 
     private void changeWeapon()
     {
+        var changed = false;
+
         //Checks if weapon is available,
         //then changes selected weapon and
         //current character sprite
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            if (weapons.IsActive(0)) activeWeapon = 0;
+            if (weapons.IsActive(0))
+            {
+                activeWeapon = 0;
+                changed = true;
+            }
         }
-        if (Input.GetKeyDown(KeyCode.Alpha2))
+        else if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            if (weapons.IsActive(1)) activeWeapon = 1;
+            if (weapons.IsActive(1))
+            {
+                activeWeapon = 1;
+                changed = true;
+            }
         }
-        if (Input.GetKeyDown(KeyCode.Alpha3))
+        else if (Input.GetKeyDown(KeyCode.Alpha3))
         {
-            if (weapons.IsActive(2)) activeWeapon = 2;
+            if (weapons.IsActive(2))
+            {
+                activeWeapon = 2;
+                changed = true;
+            }
         }
-        if (Input.GetKeyDown(KeyCode.Alpha4))
+        else if (Input.GetKeyDown(KeyCode.Alpha4))
         {
-            if (weapons.IsActive(3)) activeWeapon = 3;
+            if (weapons.IsActive(3))
+            {
+                activeWeapon = 3;
+                changed = true;
+            }
+        }
+
+        //Reload 
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            //TODO: Implement Reloading Mechanics
+            //TODO: Add Reload Animation
+        }
+
+        //Put away weapons
+        if (Input.GetKey(KeyCode.R))
+        {
+            ActivateWeapon(false);
         }
 
         //Change combat sprite
-        if(stage == 1)
+        if(changed)
         {
-
+            weaponSprCtrl.Switch(activeWeapon);
         }
     }
 
@@ -135,12 +175,48 @@ public class Player : MonoBehaviour
     public bool looksFriendly(bool isMafia)
     {
         //return true if disguise matches faction
-        if (isMafia && look == 1) return true;
-        else if(!isMafia && look == 2) return true;
+        if (isMafia && outfit == 1) return true;
+        else if(!isMafia && outfit == 2) return true;
 
         //else turn player to combat sprite and return false
-        stage = 1;
+        ActivateWeapon(true);
 
         return false;
+    }
+
+    public void ActivateWeapon(bool Activate)
+    {
+        if (Activate)
+        {
+            inCombat = true;
+            weaponSprCtrl.Activate(true);
+        }
+        else
+        {
+            inCombat = false;
+            weaponSprCtrl.Activate(false);
+        }
+    }
+
+    public void OnCollisionStay(Collision collision)
+    {
+        var obj = collision.gameObject;
+        if(obj.tag == "pickup")
+        {
+            var comp = obj.GetComponent<Pickup>();
+            if (Input.GetKeyDown(KeyCode.F))
+            {
+                if (comp.isDisguise)
+                {
+                    sprCtrl.Switch(comp.number);
+                    //TODO: Change Pickup to current outfit
+                }
+                else
+                {
+                    weapons.SetActive(comp.number);
+                    Destroy(obj);
+                }
+            }
+        }
     }
 }

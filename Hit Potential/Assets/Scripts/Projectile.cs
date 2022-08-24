@@ -19,7 +19,6 @@ public class Projectile : MonoBehaviour
         fall = f;
     }
 
-
      void Start()
     {
         //set sprite based on if its a bullet or a knife
@@ -31,7 +30,7 @@ public class Projectile : MonoBehaviour
 
     void Update()
     {
-        //Move in given position based on speed
+        //Implement Projectile Movement
 
     }
 
@@ -40,19 +39,27 @@ public class Projectile : MonoBehaviour
         //Kill ememy if player bullet
         if(collision.collider.tag == "Enemy" && friendly)
         {
-            
+            //Implement enemy damage or death
+
+            Destroy(gameObject);
         }
         
         //Kill player if enemy bullet
         if(collision.collider.tag == "Player" && !friendly)
         {
+            //Implment player damage or death
 
+            Destroy(gameObject);
         }
 
         //Damage wall on hit
         if(collision.collider.tag == "Wall")
         {
+            //Change Wall Sprite to show damage
+            var spr = collision.gameObject.GetComponent<SpriteController>();
+            spr.Switch(spr.GetCurrent() + 1);
 
+            Destroy(gameObject);
         }
 
         //Destroy bullet on hit
