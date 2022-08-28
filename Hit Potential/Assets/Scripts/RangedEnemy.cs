@@ -4,5 +4,8 @@ using UnityEngine;
 
 public class RangedEnemy : Enemy
 {
+    protected override void Attack()
+    {
 
+    }
 }

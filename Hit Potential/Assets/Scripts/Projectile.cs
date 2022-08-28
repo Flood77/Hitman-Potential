@@ -4,34 +4,25 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
-    private bool friendly;
-    private bool bullet;
-    private float speed;
-    private float fall;
+    public bool friendly;
+    public bool bullet;
+    public float speed;
+    public float fall;
 
+    [SerializeField] private Sprite corpse;
     [SerializeField] private Sprite[] sprites;
 
-    public Projectile(bool b, bool fr, float s, float f)
-    {
-        friendly = fr;
-        bullet = b;
-        speed = s;  
-        fall = f;
-    }
-
-     void Start()
+    void Start()
     {
         //set sprite based on if its a bullet or a knife
         gameObject.GetComponent<SpriteRenderer>().sprite = bullet ? sprites[0] : sprites[1];
 
+        //Add Force 
+        var rigid = gameObject.GetComponent<Rigidbody>();
+        rigid.AddForce(rigid.transform.forward * speed);
+
         //destroy bullet when it would hit the ground
         Destroy(gameObject, fall);
-    }
-
-    void Update()
-    {
-        //Implement Projectile Movement
-
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -39,7 +30,9 @@ public class Projectile : MonoBehaviour
         //Kill ememy if player bullet
         if(collision.collider.tag == "Enemy" && friendly)
         {
-            //Implement enemy damage or death
+            Destroy(collision.gameObject);
+            
+            //Implement Enemy Corpse
 
             Destroy(gameObject);
         }
@@ -47,7 +40,7 @@ public class Projectile : MonoBehaviour
         //Kill player if enemy bullet
         if(collision.collider.tag == "Player" && !friendly)
         {
-            //Implment player damage or death
+            collision.gameObject.GetComponent<Player>().Damage();
 
             Destroy(gameObject);
         }

@@ -10,4 +10,11 @@ public class Enemy : MonoBehaviour
     //TODO: Attack detected Player or get in range to do so
     //TODO: After x time lose player and go back to patrol
     //TODO: Search for Player on viewing of corpse
+
+    private void Update()
+    {
+        
+    }
+
+    protected virtual void Attack() { }
 }

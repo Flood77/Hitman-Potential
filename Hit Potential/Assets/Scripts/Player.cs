@@ -8,11 +8,15 @@ public class Player : MonoBehaviour
     [SerializeField] private Weapons weapons;
     [SerializeField] private SpriteController sprCtrl;
     [SerializeField] private SpriteController weaponSprCtrl;
+    [SerializeField] private GameObject Bullet;
+    [SerializeField] private Transform pistolBulletSpawn;
+    [SerializeField] private Transform[] shotgunBulletSpawn;
 
     //0 - base, 1 - mafia, 2 - police
     private int outfit = 0;
     private int activeWeapon;
     private bool inCombat = false;
+    private int health = 3;
     //Implement Ammo
 
     private void Start()
@@ -93,14 +97,18 @@ public class Player : MonoBehaviour
         //spawn projectile(s) logic
         else
         {
-            //TODO: Generate projectile(s) based on current direction
+            //Shotgun
             if(activeWeapon == 3)
             {
-                //shotgun - multiple projectiles
+                foreach(var a in shotgunBulletSpawn)
+                {
+                    Instantiate(Bullet, a.position, a.rotation);
+                }
             }
+            //Pistol
             else
             {
-                //pistols - one projectile
+                Instantiate(Bullet, pistolBulletSpawn.position, pistolBulletSpawn.rotation);
             }
 
             //Sound wave if not silenced
@@ -217,6 +225,15 @@ public class Player : MonoBehaviour
                     Destroy(obj);
                 }
             }
+        }
+    }
+
+    public void Damage()
+    {
+        health--;
+        if(health == 0)
+        {
+            //TODO: Death and Restart Screen
         }
     }
 }
