@@ -6,8 +6,16 @@ public class Node : MonoBehaviour
 {
     [SerializeField] private Node nextNode;
 
-    public Node getNext()
-    {
-        return nextNode;
-    }
+    private void OnTriggerEnter2D(Collider2D collision)
+	{
+		var enemy = collision.gameObject.GetComponent<Enemy>();
+		if (enemy != null)
+		{
+			if (enemy.node == this)
+			{
+				enemy.node = nextNode;
+				//enemy.Stop();
+			}
+		}
+	}
 }
