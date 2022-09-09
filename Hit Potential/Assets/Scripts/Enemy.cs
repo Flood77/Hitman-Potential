@@ -22,16 +22,35 @@ public class Enemy : MonoBehaviour
     public float speedMax = 2;
     public float accelerationMax = 2;
     public float turnRate = 10;
+    public float visionDistance = 1;
 
     public virtual Vector3 Velocity { get; set; }
     public virtual Vector3 Acceleration { get; set; }
-    public virtual Vector3 Direction { get { return Velocity.normalized; } }
 
     private void Update()
     {
+        GameObject player = null;
+        foreach (var g in GetGameObjects())
+        {
+            if (g.CompareTag("Player"))
+            {
+                player = gameObject;
+                break;
+            }
+        }
+
         if (currentState == state.Patrol)
         {
             MoveTowards(node.transform.position);
+            if(player != null) { currentState = state.Follow; }
+        }
+        else if(currentState == state.Follow)
+        {
+            Stop();
+        }
+        else if(currentState == state.Search)
+        {
+
         }
     }
 
@@ -41,16 +60,10 @@ public class Enemy : MonoBehaviour
         Velocity = Vector3.ClampMagnitude(Velocity, speedMax);
         transform.position += Velocity * Time.deltaTime;
 
-        if (Direction.magnitude > 0.1f)
+        if (Velocity.normalized.magnitude > 0.1f)
         {
-            /*var a = Quaternion.LookRotation(Direction);
-
-            var direction = new Vector2(a.x, a.y);
-            transform.up = direction;*/
-
             var r = GetComponent<Rigidbody2D>();
-            var dir = Velocity;
-            var angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+            var angle = Mathf.Atan2(Velocity.y, Velocity.x) * Mathf.Rad2Deg;
             r.MoveRotation(angle);
         }
 
@@ -59,20 +72,22 @@ public class Enemy : MonoBehaviour
 
     public void MoveTowards(Vector3 target)
     {
-        Vector3 direction = (target - transform.position).normalized;
-        ApplyForce(direction * accelerationMax);
+        ApplyForce((target - transform.position).normalized * accelerationMax);
     }
-
     public void ApplyForce(Vector3 force)
     {
         Acceleration += force;
         Acceleration = Vector3.ClampMagnitude(Acceleration, accelerationMax);
     }
-
     public void Stop()
     {
         Velocity = Vector3.zero;
     }
+
+
+    
+
+    protected virtual GameObject[] GetGameObjects() { return null; }
 
     protected virtual void Attack() { }
 }

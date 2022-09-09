@@ -14,7 +14,6 @@ public class Node : MonoBehaviour
 			if (enemy.node == this)
 			{
 				enemy.node = nextNode;
-				//enemy.Stop();
 			}
 		}
 	}
