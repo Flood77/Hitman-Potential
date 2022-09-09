@@ -18,8 +18,8 @@ public class Projectile : MonoBehaviour
         gameObject.GetComponent<SpriteRenderer>().sprite = bullet ? sprites[0] : sprites[1];
 
         //Add Force 
-        var rigid = gameObject.GetComponent<Rigidbody>();
-        rigid.AddForce(rigid.transform.forward * speed);
+        var rigid = gameObject.GetComponent<Rigidbody2D>();
+        rigid.AddForce(rigid.transform.up * speed);
 
         //destroy bullet when it would hit the ground
         Destroy(gameObject, fall);

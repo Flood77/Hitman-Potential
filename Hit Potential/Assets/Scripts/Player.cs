@@ -35,8 +35,10 @@ public class Player : MonoBehaviour
         //Change selected weapon
         changeWeapon();
         //Attack based on selected weapon
-        attack();
-        
+        if (Input.GetMouseButtonDown(0))
+        {
+            attack();
+        }
     }
 
     private void movement()
