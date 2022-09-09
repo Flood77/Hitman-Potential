@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class MeleeEnemy : Enemy
 {
-    public float angle = 3;
-    [Min(2)] public int numRaycast = 2;
+    public float angle = 15;
+    [Min(2)] public int numRaycast = 6;
 
     protected override GameObject[] GetGameObjects()
     {

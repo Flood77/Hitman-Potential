@@ -16,37 +16,72 @@ public class Enemy : MonoBehaviour
         Search
     }
 
-    [SerializeField] public Node node;
+    public GameObject nodePrefab;
+    public Node node;
     [SerializeField] private state currentState;
 
-    public float speedMax = 2;
-    public float accelerationMax = 2;
-    public float turnRate = 10;
-    public float visionDistance = 1;
+    [SerializeField] private float speedMax = 2;
+    [SerializeField] private float accelerationMax = 2;
+    [SerializeField] private float turnRate = 10;
+    [SerializeField] protected float visionDistance = 5;
+    
+    private float timer;
+    private Vector2 lastSeenPosition;
 
-    public virtual Vector3 Velocity { get; set; }
-    public virtual Vector3 Acceleration { get; set; }
+    protected virtual Vector3 Velocity { get; set; }
+    protected virtual Vector3 Acceleration { get; set; }
 
     private void Update()
     {
         GameObject player = null;
+        GameObject corpse = null;
         foreach (var g in GetGameObjects())
         {
             if (g.CompareTag("Player"))
             {
-                player = gameObject;
+                player = g;
                 break;
+            }
+            else if (g.CompareTag("Corpse"))
+            {
+                corpse = g;
             }
         }
 
         if (currentState == state.Patrol)
         {
             MoveTowards(node.transform.position);
-            if(player != null) { currentState = state.Follow; }
+            if(player != null) 
+            { 
+                Stop(); 
+                currentState = state.Follow; 
+            }
+            else if(corpse != null)
+            {
+                Stop();
+                currentState = state.Search;
+            }
         }
         else if(currentState == state.Follow)
         {
-            Stop();
+            if (player != null)
+            {
+                lastSeenPosition = player.transform.position;
+                timer = 1;
+                var diff = player.transform.position - transform.position;
+                transform.rotation = Quaternion.Euler(0f, 0f, Mathf.Atan2(diff.y, diff.x) * Mathf.Rad2Deg);
+            }
+
+            MoveTowards(lastSeenPosition);
+
+            if (player == null)
+            {
+                timer -= Time.deltaTime;
+                if (timer <= 0)
+                {
+                    currentState = state.Patrol;
+                }
+            }
         }
         else if(currentState == state.Search)
         {
@@ -54,17 +89,20 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    float yep = 1;
+
     private void LateUpdate()
     {
-        Velocity += Acceleration * Time.deltaTime;
+        Velocity += Acceleration * ((currentState == state.Follow) ? 1.0f : Time.deltaTime);
         Velocity = Vector3.ClampMagnitude(Velocity, speedMax);
         transform.position += Velocity * Time.deltaTime;
 
         if (Velocity.normalized.magnitude > 0.1f)
         {
-            var r = GetComponent<Rigidbody2D>();
-            var angle = Mathf.Atan2(Velocity.y, Velocity.x) * Mathf.Rad2Deg;
-            r.MoveRotation(angle);
+            if (currentState != state.Follow)
+            {
+                transform.rotation = Quaternion.Euler(0f, 0f, Mathf.Atan2(Velocity.y, Velocity.x) * Mathf.Rad2Deg);
+            }
         }
 
         Acceleration = Vector3.zero;
