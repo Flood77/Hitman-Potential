@@ -128,4 +128,14 @@ public class Enemy : MonoBehaviour
     protected virtual GameObject[] GetGameObjects() { return null; }
 
     protected virtual void Attack() { }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.tag == "Knife")
+        {
+            Destroy(this.gameObject);
+        }
+    }
+
+
 }

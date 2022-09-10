@@ -11,6 +11,8 @@ public class Player : MonoBehaviour
     [SerializeField] private GameObject Bullet;
     [SerializeField] private Transform pistolBulletSpawn;
     [SerializeField] private Transform[] shotgunBulletSpawn;
+    [SerializeField] private GameObject knife;
+    private bool knifeAttack = false;
 
     //0 - base, 1 - mafia, 2 - police
     private int outfit = 0;
@@ -95,6 +97,7 @@ public class Player : MonoBehaviour
         if(activeWeapon == 0)
         {
             //TODO: Implement Melee Attack with Knife
+            KnifeAttack();
         }
         //spawn projectile(s) logic
         else
@@ -238,4 +241,17 @@ public class Player : MonoBehaviour
             //TODO: Death and Restart Screen
         }
     }
+
+    public void KnifeAttack()
+    {
+        knife.GetComponent<BoxCollider2D>().enabled = true;
+        knife.transform.eulerAngles = new Vector3(0, 0, 50);
+        knifeAttack = true;
+        if (knifeAttack == true)
+        {
+            // Play Knife anim
+        }
+        knife.GetComponent<BoxCollider2D>().enabled = false;
+    }
+
 }
