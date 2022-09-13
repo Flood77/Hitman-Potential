@@ -11,12 +11,12 @@ public class Player : MonoBehaviour
     [SerializeField] private GameObject Bullet;
     [SerializeField] private Transform pistolBulletSpawn;
     [SerializeField] private Transform[] shotgunBulletSpawn;
-    [SerializeField] private GameObject knife;
+    [SerializeField] private BoxCollider2D weaponHitBox;
     [SerializeField] private Animation knifeSlash;
     [SerializeField] private Animator knifeAnim;
     [SerializeField] private float attackTimer = 3; 
 
-    private bool knifeAttack = false;
+    private bool canAttack = false;
 
     //0 - base, 1 - mafia, 2 - police
     private int outfit = 0;
@@ -38,12 +38,12 @@ public class Player : MonoBehaviour
 
         if(attackTimer <= 0)
         {
-            knifeAttack = true;
+            canAttack = true;
         }
 
-        if(knifeAnim.GetCurrentAnimatorStateInfo(0).normalizedTime > 1)
+        if(!knifeAnim.GetCurrentAnimatorStateInfo(0).IsName("KnifeSlice"))
         {
-            knife.GetComponent<BoxCollider2D>().enabled = false;
+            weaponHitBox.enabled = false;
         }
         //move player based on wasd
         movement();
@@ -113,9 +113,14 @@ public class Player : MonoBehaviour
         if(activeWeapon == 0)
         {
             //TODO: Implement Melee Attack with Knife
-            if(attackTimer <= 0)
+            if(canAttack)
             {
-                KnifeAttack();
+                attackTimer = .75f;
+                weaponHitBox.enabled = true;
+                canAttack = false;
+
+                // Play Knife anim
+                knifeSlash.Play("KnifeSlice");
             }
         }
         //spawn projectile(s) logic
@@ -259,16 +264,5 @@ public class Player : MonoBehaviour
         {
             //TODO: Death and Restart Screen
         }
-    }
-
-    public void KnifeAttack()
-    {
-        attackTimer = 3;
-        knife.GetComponent<BoxCollider2D>().enabled = true;
-        knifeAttack = false;
-      
-        // Play Knife anim
-        knifeSlash.Play("KnifeSlice");
-
     }
 }

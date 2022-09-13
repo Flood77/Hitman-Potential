@@ -546,7 +546,7 @@ MonoBehaviour:
   - {fileID: 1880367083}
   - {fileID: 1880367083}
   - {fileID: 1880367083}
-  knife: {fileID: 1227279842}
+  weaponHitBox: {fileID: 1227279846}
   knifeSlash: {fileID: 1227279848}
   knifeAnim: {fileID: 1227279847}
   attackTimer: 3
