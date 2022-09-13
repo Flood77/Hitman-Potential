@@ -12,6 +12,10 @@ public class Player : MonoBehaviour
     [SerializeField] private Transform pistolBulletSpawn;
     [SerializeField] private Transform[] shotgunBulletSpawn;
     [SerializeField] private GameObject knife;
+    [SerializeField] private Animation knifeSlash;
+    [SerializeField] private Animator knifeAnim;
+    [SerializeField] private float attackTimer = 3; 
+
     private bool knifeAttack = false;
 
     //0 - base, 1 - mafia, 2 - police
@@ -30,6 +34,17 @@ public class Player : MonoBehaviour
 
     void Update()
     {
+        attackTimer -= Time.deltaTime;
+
+        if(attackTimer <= 0)
+        {
+            knifeAttack = true;
+        }
+
+        if(knifeAnim.GetCurrentAnimatorStateInfo(0).normalizedTime > 1)
+        {
+            knife.GetComponent<BoxCollider2D>().enabled = false;
+        }
         //move player based on wasd
         movement();
         //Rotate player to where the mouse is 
@@ -41,6 +56,7 @@ public class Player : MonoBehaviour
         {
             attack();
         }
+
     }
 
     private void movement()
@@ -97,7 +113,10 @@ public class Player : MonoBehaviour
         if(activeWeapon == 0)
         {
             //TODO: Implement Melee Attack with Knife
-            KnifeAttack();
+            if(attackTimer <= 0)
+            {
+                KnifeAttack();
+            }
         }
         //spawn projectile(s) logic
         else
@@ -244,14 +263,12 @@ public class Player : MonoBehaviour
 
     public void KnifeAttack()
     {
+        attackTimer = 3;
         knife.GetComponent<BoxCollider2D>().enabled = true;
-        knife.transform.eulerAngles = new Vector3(0, 0, 50);
-        knifeAttack = true;
-        if (knifeAttack == true)
-        {
-            // Play Knife anim
-        }
-        knife.GetComponent<BoxCollider2D>().enabled = false;
-    }
+        knifeAttack = false;
+      
+        // Play Knife anim
+        knifeSlash.Play("KnifeSlice");
 
+    }
 }

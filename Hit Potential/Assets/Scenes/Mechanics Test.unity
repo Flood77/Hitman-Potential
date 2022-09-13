@@ -547,6 +547,9 @@ MonoBehaviour:
   - {fileID: 1880367083}
   - {fileID: 1880367083}
   knife: {fileID: 1227279842}
+  knifeSlash: {fileID: 1227279848}
+  knifeAnim: {fileID: 1227279847}
+  attackTimer: 3
 --- !u!4 &751564525
 Transform:
   m_ObjectHideFlags: 0
@@ -612,7 +615,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.002593875, y: -0.027235419}
+  m_Offset: {x: 0.002593875, y: -0.13976842}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -623,7 +626,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.5071684, y: 0.30225426}
+  m_Size: {x: 0.5071684, y: 0.07718825}
   m_EdgeRadius: 0
 --- !u!1001 &845798675
 PrefabInstance:
@@ -720,6 +723,8 @@ GameObject:
   - component: {fileID: 1227279844}
   - component: {fileID: 1227279845}
   - component: {fileID: 1227279846}
+  - component: {fileID: 1227279847}
+  - component: {fileID: 1227279848}
   m_Layer: 0
   m_Name: knifeSpot
   m_TagString: Knife
@@ -735,7 +740,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1227279842}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.169, y: 0.323, z: 0}
+  m_LocalPosition: {x: 0.148, y: 0.331, z: 0}
   m_LocalScale: {x: 0.2732, y: 0.293, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -815,13 +820,13 @@ BoxCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1227279842}
-  m_Enabled: 0
+  m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0.097480506, y: -0.051127315}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -832,8 +837,44 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.5, y: 1.6}
+  m_Size: {x: 0.405039, y: 1.5977454}
   m_EdgeRadius: 0
+--- !u!95 &1227279847
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1227279842}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 58888971ec706af4f97d909956ea23da, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!111 &1227279848
+Animation:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1227279842}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Animation: {fileID: 7400000, guid: 56dd8e3da8bd6514ba69a3f0f1391fc1, type: 2}
+  m_Animations:
+  - {fileID: 7400000, guid: 56dd8e3da8bd6514ba69a3f0f1391fc1, type: 2}
+  m_WrapMode: 0
+  m_PlayAutomatically: 1
+  m_AnimatePhysics: 0
+  m_CullingType: 0
 --- !u!114 &1228584823 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4028405335250111818, guid: e8c8c58ea19d0a940b5b44ebb5b722e1, type: 3}
@@ -1102,7 +1143,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.06642461, y: -0.008897781}
+  m_Offset: {x: -0.020032883, y: -0.0009771883}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -1113,7 +1154,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.20107698, y: 0.3167243}
+  m_Size: {x: 0.29386044, y: 0.47287232}
   m_EdgeRadius: 0
 --- !u!50 &1904250705
 Rigidbody2D:
@@ -1151,7 +1192,7 @@ MonoBehaviour:
   nodePrefab: {fileID: 337041293}
   node: {fileID: 1228584826}
   currentState: 0
-  speedMax: 2
+  speedMax: 0
   accelerationMax: 2
   turnRate: 10
   visionDistance: 5
