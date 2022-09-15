@@ -1058,7 +1058,7 @@ GameObject:
   - component: {fileID: 1904250705}
   m_Layer: 2
   m_Name: Enemy
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1195,6 +1195,7 @@ MonoBehaviour:
   speedMax: 0
   accelerationMax: 2
   turnRate: 10
+  deadBody: {fileID: 5373761846730766381, guid: 57b2a01d30cef9847855a2a2220051c2, type: 3}
   visionDistance: 5
   angle: 15
   numRaycast: 6

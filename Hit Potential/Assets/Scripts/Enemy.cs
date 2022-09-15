@@ -23,6 +23,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] private float speedMax = 2;
     [SerializeField] private float accelerationMax = 2;
     [SerializeField] private float turnRate = 10;
+    [SerializeField] private GameObject deadBody;
     [SerializeField] protected float visionDistance = 5;
     
     private float timer;
@@ -133,6 +134,7 @@ public class Enemy : MonoBehaviour
     {
         if(collision.tag == "Knife")
         {
+            Instantiate(deadBody, this.transform.position, this.transform.rotation);
             Destroy(this.gameObject);
         }
     }
