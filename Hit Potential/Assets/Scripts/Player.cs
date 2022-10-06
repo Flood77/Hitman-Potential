@@ -14,7 +14,8 @@ public class Player : MonoBehaviour
     [SerializeField] private BoxCollider2D weaponHitBox;
     [SerializeField] private Animation knifeSlash;
     [SerializeField] private Animator knifeAnim;
-    [SerializeField] private float attackTimer = 3; 
+    [SerializeField] private float attackTimer = .75f; 
+    [SerializeField] private float knifeTimer = 0; 
 
     private bool canAttack = false;
 
@@ -35,13 +36,14 @@ public class Player : MonoBehaviour
     void Update()
     {
         attackTimer -= Time.deltaTime;
+        knifeTimer -= Time.deltaTime;
 
         if(attackTimer <= 0)
         {
             canAttack = true;
         }
 
-        if(!knifeAnim.GetCurrentAnimatorStateInfo(0).IsName("KnifeSlice"))
+        if(knifeTimer <= 0)
         {
             weaponHitBox.enabled = false;
         }
@@ -115,12 +117,12 @@ public class Player : MonoBehaviour
             //TODO: Implement Melee Attack with Knife
             if(canAttack)
             {
-                attackTimer = .75f;
+                attackTimer = .5f;
                 weaponHitBox.enabled = true;
                 canAttack = false;
 
-                // Play Knife anim
-                knifeSlash.Play("KnifeSlice");
+                knifeTimer = .45f;
+                knifeSlash.Play();
             }
         }
         //spawn projectile(s) logic
@@ -245,12 +247,16 @@ public class Player : MonoBehaviour
             {
                 if (comp.isDisguise)
                 {
-                    sprCtrl.Switch(comp.number);
-                    //TODO: Change Pickup to current outfit
+                    var current = sprCtrl.GetCurrent();
+
+                    sprCtrl.Switch(comp.index);
+
+                    comp.index = current;
+                    comp.Switch();
                 }
                 else
                 {
-                    weapons.SetActive(comp.number);
+                    weapons.SetActive(comp.index);
                     Destroy(obj);
                 }
             }

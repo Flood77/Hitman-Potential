@@ -84,7 +84,7 @@ SpriteRenderer:
   m_Size: {x: 0.32, y: 0.32}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!114 &4653560039373418986
@@ -106,7 +106,7 @@ MonoBehaviour:
   corpse: {fileID: 0}
   sprites:
   - {fileID: 21300000, guid: 2c7ca4f7298423047b3f155546f1f431, type: 3}
-  - {fileID: 21300000, guid: 2c7ca4f7298423047b3f155546f1f431, type: 3}
+  - {fileID: 21300000, guid: f2959f08d16fe10468d3450da5c64b03, type: 3}
 --- !u!61 &8201397375572692297
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -124,7 +124,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
+    oldSize: {x: 0.5, y: 0.5}
     newSize: {x: 0.32, y: 0.32}
     adaptiveTilingThreshold: 0.5
     drawMode: 0

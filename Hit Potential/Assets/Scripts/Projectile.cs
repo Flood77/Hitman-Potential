@@ -30,9 +30,7 @@ public class Projectile : MonoBehaviour
         //Kill ememy if player bullet
         if(collision.collider.tag == "Enemy" && friendly)
         {
-            Destroy(collision.gameObject);
-            
-            //Implement Enemy Corpse
+            collision.gameObject.GetComponent<Enemy>().Die();
 
             Destroy(gameObject);
         }

@@ -11,9 +11,10 @@ public class Node : MonoBehaviour
 		var enemy = collision.gameObject.GetComponent<Enemy>();
 		if (enemy != null)
 		{
-			if (enemy.node == this)
+			var n = enemy.Node;
+			if (n == this)
 			{
-				enemy.node = nextNode;
+				enemy.Node = nextNode;
 			}
 		}
 	}

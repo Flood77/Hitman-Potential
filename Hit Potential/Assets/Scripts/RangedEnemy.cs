@@ -33,6 +33,10 @@ public class RangedEnemy : Enemy
 
     protected override void Attack()
     {
-
+        //check timer
+            //check distance
+            
+                //fire toward player
+                //reset timer
     }
 }
