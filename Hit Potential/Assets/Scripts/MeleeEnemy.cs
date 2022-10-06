@@ -7,6 +7,10 @@ public class MeleeEnemy : Enemy
     public float angle = 15;
     [Min(2)] public int numRaycast = 6;
 
+    [SerializeField] private BoxCollider2D weaponHitBox;
+    [SerializeField] private Animation knifeSlash;
+    [SerializeField] private Animator knifeAnim;
+    [SerializeField] private float attackTimer = 0.75f;
     protected override GameObject[] GetGameObjects()
     {
         var gameObjects = new List<GameObject>();
@@ -30,8 +34,39 @@ public class MeleeEnemy : Enemy
         return gameObjects.ToArray();
     }
 
+    private bool canAttack = false;
+    protected override void Timers()
+    {
+        attackTimer -= Time.deltaTime;
+
+        if (attackTimer <= 0)
+        {
+            canAttack = true;
+        }
+
+        if (!knifeAnim.GetCurrentAnimatorStateInfo(0).IsName("EnemyKnifeSlice"))
+        {
+            weaponHitBox.enabled = false;
+        }
+
+    }
+
     protected override void Attack()
     {
+        var playerPosition = new Vector3(lastSeenPosition.x, lastSeenPosition.y, 0);
+        var distance = Vector3.Distance(playerPosition, gameObject.transform.position);
 
+        if (distance <= 0.1)
+        {
+            if (canAttack)
+            {
+                attackTimer = .75f;
+                weaponHitBox.enabled = true;
+                canAttack = false;
+
+                // Play Knife anim
+                knifeSlash.Play("EnemyKnifeSlice");
+            }
+        }
     }
 }

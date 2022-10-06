@@ -9,6 +9,9 @@ public class Enemy : MonoBehaviour
     //TODO: Attack detected Player or get in range to do so
     //TODO: After x time lose player and go back to patrol
     //TODO: Search for Player on viewing of corpse
+   
+
+
     protected enum state
     {
         Patrol,
@@ -27,7 +30,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] protected float visionDistance = 5;
     
     private float timer;
-    private Vector2 lastSeenPosition;
+    protected Vector2 lastSeenPosition;
 
     protected virtual Vector3 Velocity { get; set; }
     protected virtual Vector3 Acceleration { get; set; }
@@ -74,7 +77,8 @@ public class Enemy : MonoBehaviour
             }
 
             MoveTowards(lastSeenPosition);
-
+            Timers();
+            Attack();
             if (player == null)
             {
                 timer -= Time.deltaTime;
@@ -129,6 +133,8 @@ public class Enemy : MonoBehaviour
     protected virtual GameObject[] GetGameObjects() { return null; }
 
     protected virtual void Attack() { }
+
+    protected virtual void Timers() { }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
