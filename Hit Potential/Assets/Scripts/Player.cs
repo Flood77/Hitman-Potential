@@ -271,4 +271,12 @@ public class Player : MonoBehaviour
             //TODO: Death and Restart Screen
         }
     }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.tag == "EnemyKnife")
+        {
+            Destroy(this.gameObject);
+        }
+    }
 }

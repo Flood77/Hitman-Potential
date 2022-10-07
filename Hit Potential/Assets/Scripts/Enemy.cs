@@ -70,8 +70,8 @@ public class Enemy : MonoBehaviour
             }
 
             MoveTowards(lastSeenPosition);
+            Timers();
             Attack();
-
             if (player == null)
             {
                 timer -= Time.deltaTime;
@@ -145,6 +145,8 @@ public class Enemy : MonoBehaviour
         Instantiate(deadBody, this.transform.position, this.transform.rotation);
         Destroy(this.gameObject);
     }
+
+    protected virtual void Timers() { }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
