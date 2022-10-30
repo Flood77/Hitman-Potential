@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    #region Variables
+
     [SerializeField] private float speed = 10;
     [SerializeField] private Weapons weapons;
     [SerializeField] private SpriteController sprCtrl;
@@ -25,6 +27,8 @@ public class Player : MonoBehaviour
     private bool inCombat = false;
     private int health = 3;
     //Implement Ammo
+
+    #endregion
 
     private void Start()
     {
@@ -276,7 +280,7 @@ public class Player : MonoBehaviour
     {
         if (collision.tag == "EnemyKnife")
         {
-            Destroy(this.gameObject);
+            Damage();
         }
     }
 }
