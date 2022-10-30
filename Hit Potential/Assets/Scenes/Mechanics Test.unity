@@ -2367,7 +2367,7 @@ MonoBehaviour:
   spriteRenderer: {fileID: 1227279844}
   sprites:
   - {fileID: 21300000, guid: f2959f08d16fe10468d3450da5c64b03, type: 3}
-  - {fileID: 21300000, guid: 6ef8760e2eb94f343aae6644219d449b, type: 3}
+  - {fileID: 21300000, guid: 1f98951443b0c72469ca5b924be9c915, type: 3}
 --- !u!61 &1227279846
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -2674,7 +2674,6 @@ MonoBehaviour:
   deadBody: {fileID: 5373761846730766381, guid: 57b2a01d30cef9847855a2a2220051c2, type: 3}
   visionDistance: 5
   turnRate: 1
-  Node: {fileID: 0}
   angle: 15
   numRaycast: 6
   weaponHitBox: {fileID: 62980424}
