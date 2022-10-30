@@ -24,10 +24,10 @@ public class Enemy : MonoBehaviour
     private float timer;
     private eState currentState;
     private Vector2 posDiff;
-    private NavMeshAgent nav;
     private Vector3 Velocity;
     private Vector3 Acceleration;
 
+    protected NavMeshAgent nav;
     protected float attackTimer;
     protected Vector2 lastSeenPosition;
 
@@ -48,6 +48,7 @@ public class Enemy : MonoBehaviour
 
         GameObject player = null;
         GameObject corpse = null;
+        //Check Sight Line for player or corpse
         foreach (var g in GetGameObjects())
         {
             if (g.CompareTag("Player"))
@@ -64,7 +65,9 @@ public class Enemy : MonoBehaviour
 
         if (currentState == eState.Patrol)
         {
+            //Follow nodes
             NavMoveTowards(node.transform.position);
+            //Change state if finding player or corpse
             if (player != null)
             {
                 NavStop();
@@ -78,6 +81,7 @@ public class Enemy : MonoBehaviour
         }
         else if (currentState == eState.Follow)
         {
+            //Rotate to look at player
             if (player != null)
             {
                 NavMoveTowards(player.transform.position);
@@ -87,8 +91,11 @@ public class Enemy : MonoBehaviour
                 transform.rotation = Quaternion.Euler(0f, 0f, Mathf.Atan2(nav.velocity.y, nav.velocity.x) * Mathf.Rad2Deg);
             }
 
+            //Run attack countdowns and attack logic
             Timers();
             Attack();
+
+            //Count down to Search mode
             if (player == null)
             {
                 timer -= Time.deltaTime;
@@ -101,6 +108,7 @@ public class Enemy : MonoBehaviour
         }
         else if (currentState == eState.Search)
         {
+            //TODO: Fix yes...
             var a = Random.Range(-180, 180);
 
             //TODO: Fix Search Look Rotation to turn randomly
@@ -127,7 +135,7 @@ public class Enemy : MonoBehaviour
     #region Movement Logic
     private void LateUpdate()
     {
-        //Nav
+        //Navmesh Rotation
         if(nav.velocity.normalized.magnitude > 0.1f)
         {
             if(currentState == eState.Patrol)
@@ -136,22 +144,27 @@ public class Enemy : MonoBehaviour
             }
         }
 
-        //Manual
-        /*Velocity += Acceleration * ((currentState == eState.Follow) ? 1.0f : Time.deltaTime);
-        Velocity = Vector3.ClampMagnitude(Velocity, speedMax);
-        transform.position += Velocity * Time.deltaTime;
+        //Manual Movement 
+        { 
+            /*
+            Velocity += Acceleration * ((currentState == eState.Follow) ? 1.0f : Time.deltaTime);
+            Velocity = Vector3.ClampMagnitude(Velocity, speedMax);
+            transform.position += Velocity * Time.deltaTime;
 
-        if (Velocity.normalized.magnitude > 0.1f)
-        {
-            if (currentState == eState.Patrol)
+            if (Velocity.normalized.magnitude > 0.1f)
             {
-                transform.rotation = Quaternion.Euler(0f, 0f, Mathf.Atan2(Velocity.y, Velocity.x) * Mathf.Rad2Deg);
+                if (currentState == eState.Patrol)
+                {
+                    transform.rotation = Quaternion.Euler(0f, 0f, Mathf.Atan2(Velocity.y, Velocity.x) * Mathf.Rad2Deg);
+                }
             }
-        }
 
-        Acceleration = Vector3.zero;*/
+            Acceleration = Vector3.zero;
+            */
+        }
     }
 
+    //Navmesh Movement Processes
     public void NavMoveTowards(Vector3 target)
     {
         nav.SetDestination(target);
@@ -165,6 +178,7 @@ public class Enemy : MonoBehaviour
         nav.isStopped = false;
     }
 
+    //Manual Movement Processes
     public void ManualMoveTowards(Vector3 target)
     {
         Acceleration += (target - transform.position).normalized * accelerationMax;
@@ -179,6 +193,7 @@ public class Enemy : MonoBehaviour
     #region virtuals
     protected virtual GameObject[] GetGameObjects() { return null; }
     protected virtual void Attack() { }
+    protected virtual void Timers() { }
     #endregion
 
     public void Die()
@@ -187,14 +202,15 @@ public class Enemy : MonoBehaviour
         Destroy(this.gameObject);
     }
 
-    protected virtual void Timers() { }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        //Death by Knife
         if(collision.tag == "Knife")
         {
             Die();
         }
+        //Collision with Sound Indicator
         else if(collision.tag == "Sound")
         {
             var playerMade = collision.gameObject.GetComponent<SoundIndicator>().fromPlayer;

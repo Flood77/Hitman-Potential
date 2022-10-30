@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Pickup : MonoBehaviour 
 {
-    [SerializeField] private SpriteRenderer renderer;
+    [SerializeField] private SpriteRenderer ren;
     [SerializeField] private Sprite[] disguises;
 
     public bool isDisguise;
@@ -12,7 +12,7 @@ public class Pickup : MonoBehaviour
 
     public void Switch()
     {
-        renderer.sprite = disguises[index];
+        ren.sprite = disguises[index];
     }
 }
 
