@@ -31,7 +31,7 @@ public class Enemy : MonoBehaviour
     protected float attackTimer;
     protected Vector2 lastSeenPosition;
 
-    public Node Node;
+    public Node Node { get { return node; } set { node = value; } }
 
     #endregion
 
