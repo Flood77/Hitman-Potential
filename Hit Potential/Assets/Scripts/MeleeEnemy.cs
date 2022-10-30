@@ -10,7 +10,6 @@ public class MeleeEnemy : Enemy
     [SerializeField] private BoxCollider2D weaponHitBox;
     [SerializeField] private Animation knifeSlash;
     [SerializeField] private Animator knifeAnim;
-    [SerializeField] private float attackTimer = 0.75f;
     protected override GameObject[] GetGameObjects()
     {
         var gameObjects = new List<GameObject>();
@@ -64,7 +63,6 @@ public class MeleeEnemy : Enemy
                 weaponHitBox.enabled = true;
                 canAttack = false;
 
-                // Play Knife anim
                 knifeSlash.Play("EnemyKnifeSlice");
             }
         }
