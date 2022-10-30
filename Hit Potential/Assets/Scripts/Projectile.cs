@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
-    public bool friendly;
     public bool bullet;
     public float speed;
     public float fall;
@@ -28,7 +27,7 @@ public class Projectile : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         //Kill ememy if player bullet
-        if(collision.collider.tag == "Enemy" && friendly)
+        if(collision.collider.tag == "Enemy")
         {
             collision.gameObject.GetComponent<Enemy>().Die();
 
@@ -36,7 +35,7 @@ public class Projectile : MonoBehaviour
         }
         
         //Kill player if enemy bullet
-        if(collision.collider.tag == "Player" && !friendly)
+        if(collision.collider.tag == "Player")
         {
             collision.gameObject.GetComponent<Player>().Damage();
 
@@ -48,9 +47,11 @@ public class Projectile : MonoBehaviour
         {
             //Change Wall Sprite to show damage
             var spr = collision.gameObject.GetComponent<SpriteController>();
-            spr.Switch(spr.GetCurrent() + 1);
-
-            Destroy(gameObject);
+            if (spr)
+            {
+                spr.Switch(spr.GetCurrent() + 1);
+                Destroy(gameObject);
+            }
         }
 
         //Destroy bullet on hit

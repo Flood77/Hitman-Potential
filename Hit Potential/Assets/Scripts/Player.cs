@@ -28,6 +28,8 @@ public class Player : MonoBehaviour
     private int health = 3;
     //Implement Ammo
 
+    //private List<GameObject> collisions;
+
     #endregion
 
     private void Start()
@@ -241,10 +243,10 @@ public class Player : MonoBehaviour
         }
     }
 
-    public void OnCollisionStay(Collision collision)
+    private void OnTriggerStay2D(Collider2D collision)
     {
         var obj = collision.gameObject;
-        if(obj.tag == "pickup")
+        if(obj.tag == "Pickup")
         {
             var comp = obj.GetComponent<Pickup>();
             if (Input.GetKeyDown(KeyCode.F))
