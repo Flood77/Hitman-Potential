@@ -10,6 +10,7 @@ public class Pickup : MonoBehaviour
     public bool isDisguise;
     public int index;
 
+    //Switches sprite to new disguise
     public void Switch()
     {
         ren.sprite = disguises[index];

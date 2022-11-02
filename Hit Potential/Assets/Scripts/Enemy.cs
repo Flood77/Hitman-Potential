@@ -13,13 +13,15 @@ public class Enemy : MonoBehaviour
     }
 
     #region Properties and Fields
+    [SerializeField] private float speedMax = 2;
+    [SerializeField] protected float turnRate = 1;
+    [SerializeField] private float accelerationMax = 2;
+    [SerializeField] protected float visionDistance = 5;
+
+    [SerializeField] protected NavMeshAgent nav;
 
     [SerializeField] private Node node;
-    [SerializeField] private float speedMax = 2;
-    [SerializeField] private float accelerationMax = 2;
     [SerializeField] private GameObject deadBody;
-    [SerializeField] protected float visionDistance = 5;
-    [SerializeField] protected float turnRate = 1;
     
     private float timer;
     private eState currentState;
@@ -27,7 +29,7 @@ public class Enemy : MonoBehaviour
     private Vector3 Velocity;
     private Vector3 Acceleration;
 
-    protected NavMeshAgent nav;
+    protected bool canAttack = false;
     protected float attackTimer;
     protected Vector2 lastSeenPosition;
 
@@ -37,12 +39,13 @@ public class Enemy : MonoBehaviour
 
     private void Start()
     {
-        nav = GetComponent<NavMeshAgent>();
+        //Keeps nav from rotating agent to the wrong dimension
         nav.updateUpAxis = false;
     }
 
     private void Update()
     {
+        //Set nav settings
         nav.speed = speedMax;
         nav.angularSpeed = turnRate;
 
@@ -138,6 +141,7 @@ public class Enemy : MonoBehaviour
         //Navmesh Rotation
         if(nav.velocity.normalized.magnitude > 0.1f)
         {
+            //Rotates to face movement direction when on Patrol
             if(currentState == eState.Patrol)
             {
                 transform.rotation = Quaternion.Euler(0f, 0f, Mathf.Atan2(nav.velocity.y, nav.velocity.x) * Mathf.Rad2Deg);
@@ -196,6 +200,7 @@ public class Enemy : MonoBehaviour
     protected virtual void Timers() { }
     #endregion
 
+    //Destroy enemy and make dead body
     public void Die()
     {
         Instantiate(deadBody, this.transform.position, this.transform.rotation);

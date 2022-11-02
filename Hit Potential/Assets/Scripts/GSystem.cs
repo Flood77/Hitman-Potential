@@ -16,8 +16,10 @@ public class GSystem : MonoBehaviour
         
     }
 
+    //Create sound indicator objective
     public void CreateSoundIndicator(GameObject parent, int size, bool fromPlayer)
     {
+        //Instantiate object and set if it was made by player or not
         var sound = Instantiate(SoundIndicator, parent.transform);
         sound.GetComponent<SoundIndicator>().fromPlayer = fromPlayer;
         Destroy(sound, size);

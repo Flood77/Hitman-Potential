@@ -15,8 +15,9 @@ public class Weapons : MonoBehaviour
     //Returns if selected weapon is active
     public bool IsActive(int selected) { return actives[selected]; }
 
-    //Returns actives for visual board
+    //Returns active weapons for visual board
     public bool[] Actives() { return actives; }
 
+    //Activates selected weapon choice
     public void SetActive(int selected) { actives[selected] = true; }
 }

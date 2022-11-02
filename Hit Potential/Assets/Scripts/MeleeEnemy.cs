@@ -4,45 +4,55 @@ using UnityEngine;
 
 public class MeleeEnemy : Enemy
 {
-    public float angle = 15;
-    [Min(2)] public int numRaycast = 6;
-
+    #region Variables
     [SerializeField] private BoxCollider2D weaponHitBox;
     [SerializeField] private Animation knifeSlash;
     [SerializeField] private Animator knifeAnim;
+
+    public float angle = 15;
+    public int numRaycast = 6;
+    #endregion
+
+    //Returns a list of all GameObjects seen by the enemy
     protected override GameObject[] GetGameObjects()
     {
         var gameObjects = new List<GameObject>();
 
+        //Produce raycasts through given values
         var angleOffset = (angle * 2) / (numRaycast - 1);
         for (int i = 0; i < numRaycast; i++)
         {
+            //Adjust direction for needed rotation
             var rotation = Quaternion.AngleAxis(-angle + (angleOffset * i), Vector3.forward);
             Vector2 up = rotation * transform.right;
 
+            //Produce raycast in front of the enemy
             var d = visionDistance;
             var ray = Physics2D.Raycast(transform.position, up, visionDistance);
             if (ray)
             {
+                //Add gameobject to list if collided with raycast
                 d = ray.distance;
                 gameObjects.Add(ray.collider.gameObject);
             }
+
             Debug.DrawRay(transform.position, up * d, Color.red);
         }
 
         return gameObjects.ToArray();
     }
 
-    private bool canAttack = false;
+    //Adjusts timers based on time passed
     protected override void Timers()
     {
+        //Adjust attackTimer and change canAttack accordingly
         attackTimer -= Time.deltaTime;
-
         if (attackTimer <= 0)
         {
             canAttack = true;
         }
 
+        //Disable knife collision if animation is over
         if (!knifeAnim.GetCurrentAnimatorStateInfo(0).IsName("EnemyKnifeSlice"))
         {
             weaponHitBox.enabled = false;
@@ -50,15 +60,19 @@ public class MeleeEnemy : Enemy
 
     }
 
+    //Check for and excute Enemy specific attack
     protected override void Attack()
     {
+        //Find distance between player and enemy
         var playerPosition = new Vector3(nav.velocity.x, nav.velocity.y, 0);
         var distance = Vector3.Distance(playerPosition, gameObject.transform.position);
 
+        //If within distance then check timer
         if (distance <= 0.1)
         {
             if (canAttack)
             {
+                //Reset timer, play animation, & enable collision
                 attackTimer = .75f;
                 weaponHitBox.enabled = true;
                 canAttack = false;

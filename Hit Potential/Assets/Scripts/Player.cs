@@ -5,31 +5,28 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     #region Variables
-
     [SerializeField] private float speed = 10;
+    [SerializeField] private float knifeTimer = 0; 
+    [SerializeField] private float attackTimer = .75f; 
+
     [SerializeField] private Weapons weapons;
     [SerializeField] private SpriteController sprCtrl;
     [SerializeField] private SpriteController weaponSprCtrl;
-    [SerializeField] private GameObject Bullet;
+    [SerializeField] private BoxCollider2D weaponHitBox;
     [SerializeField] private Transform pistolBulletSpawn;
     [SerializeField] private Transform[] shotgunBulletSpawn;
-    [SerializeField] private BoxCollider2D weaponHitBox;
+
+    [SerializeField] private GameObject Bullet;
     [SerializeField] private Animation knifeSlash;
     [SerializeField] private Animator knifeAnim;
-    [SerializeField] private float attackTimer = .75f; 
-    [SerializeField] private float knifeTimer = 0; 
-
-    private bool canAttack = false;
 
     //0 - base, 1 - mafia, 2 - police
     private int outfit = 0;
+    private int health = 3;
     private int activeWeapon;
     private bool inCombat = false;
-    private int health = 3;
+    private bool canAttack = false;
     //Implement Ammo
-
-    //private List<GameObject> collisions;
-
     #endregion
 
     private void Start()
@@ -41,25 +38,22 @@ public class Player : MonoBehaviour
 
     void Update()
     {
+        //Attack Timer and Knife Activation Timer
         attackTimer -= Time.deltaTime;
         knifeTimer -= Time.deltaTime;
-
         if(attackTimer <= 0)
         {
             canAttack = true;
         }
-
         if(knifeTimer <= 0)
         {
             weaponHitBox.enabled = false;
         }
-        //move player based on wasd
+
+        //Call functions that take user input
         movement();
-        //Rotate player to where the mouse is 
         rotation();
-        //Change selected weapon
         changeWeapon();
-        //Attack based on selected weapon
         if (Input.GetMouseButtonDown(0))
         {
             attack();
@@ -67,28 +61,32 @@ public class Player : MonoBehaviour
 
     }
 
+    #region Movement
+    //Move player based on WASD controls
     private void movement()
     {
-        //Based on key pressed move character
-        //in selected direction
+        //Move up
         if (Input.GetKey(KeyCode.W))
         {
             var temp = transform.position;
             temp.y += speed;
             transform.position = temp;
         }
+        //Move down
         if (Input.GetKey(KeyCode.S))
         {
             var temp = transform.position;
             temp.y -= speed;
             transform.position = temp;
         }
+        //Move right
         if (Input.GetKey(KeyCode.D))
         {
             var temp = transform.position;
             temp.x += speed;
             transform.position = temp;
         }
+        //Move left
         if (Input.GetKey(KeyCode.A))
         {
             var temp = transform.position;
@@ -97,6 +95,7 @@ public class Player : MonoBehaviour
         }
     }
 
+    //Rotate player based on mouse position
     private void rotation()
     {
         //Get mouseposition on the screen
@@ -108,8 +107,10 @@ public class Player : MonoBehaviour
         var direction = new Vector2(mp.x - transform.position.x, mp.y - transform.position.y);
         transform.up = direction;
     }
+    #endregion
 
-    //Attack based on if it physical or projectile
+    #region Weapons
+    //Attack based on currently selected weapon
     private void attack()
     {
         //Activate weapon if deactivated
@@ -117,12 +118,12 @@ public class Player : MonoBehaviour
         {
             ActivateWeapon(true);
         }
-        //melee attack logic
+        //Knife Attack
         if(activeWeapon == 0)
         {
-            //TODO: Implement Melee Attack with Knife
             if(canAttack)
             {
+                //Reset Timer, enable collider, & play animation
                 attackTimer = .5f;
                 weaponHitBox.enabled = true;
                 canAttack = false;
@@ -131,38 +132,54 @@ public class Player : MonoBehaviour
                 knifeSlash.Play();
             }
         }
-        //spawn projectile(s) logic
+        //Shooting Logic
         else
         {
-            //Shotgun
+            //Shotgun Attack
             if(activeWeapon == 3)
             {
+                //Spawn bullet for each spawn point
                 foreach(var a in shotgunBulletSpawn)
                 {
                     Instantiate(Bullet, a.position, a.rotation);
                 }
             }
-            //Pistol
+            //Pistol Attack
             else
             {
+                //Spawn bullet from spawn point
                 Instantiate(Bullet, pistolBulletSpawn.position, pistolBulletSpawn.rotation);
-            }
 
-            //Sound wave if not silenced
-            if(activeWeapon != 1)
-            {
-                //TODO: Implement Sound Wave on Audio Shot
+                //Sound wave if not silenced
+                if (activeWeapon != 1)
+                {
+                    //TODO: Implement Sound Wave on Audio Shot
+                }
             }
         }
     }
 
+    //Enable/Disable weapon sprite
+    public void ActivateWeapon(bool Activate)
+    {
+        if (Activate)
+        {
+            inCombat = true;
+            weaponSprCtrl.Activate(true);
+        }
+        else
+        {
+            inCombat = false;
+            weaponSprCtrl.Activate(false);
+        }
+    }
+
+    //Change current weapon
     private void changeWeapon()
     {
         var changed = false;
 
-        //Checks if weapon is available,
-        //then changes selected weapon and
-        //current character sprite
+        //Checks weapon if it is available, then set true
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             if (weapons.IsActive(0))
@@ -196,7 +213,7 @@ public class Player : MonoBehaviour
             }
         }
 
-        //Reload 
+        //Reload Weapon
         if (Input.GetKeyDown(KeyCode.R))
         {
             //TODO: Implement Reloading Mechanics
@@ -215,42 +232,49 @@ public class Player : MonoBehaviour
             weaponSprCtrl.Switch(activeWeapon);
         }
     }
+    #endregion
 
+    #region External Dealings
     //Called by enemy when seen
     public bool looksFriendly(bool isMafia)
     {
-        //return true if disguise matches faction
-        if (isMafia && outfit == 1) return true;
-        else if(!isMafia && outfit == 2) return true;
+        bool temp = false;
 
-        //else turn player to combat sprite and return false
-        ActivateWeapon(true);
+        //Check if player outfit matches enemy faction
+        if (isMafia && outfit == 1) temp = true;
+        else if (!isMafia && outfit == 2) temp = true;
 
-        return false;
+        //Check if player weapon is out
+        if (inCombat) temp = false;
+        
+        //Equip weapon if seen as enemy
+        if(!temp) ActivateWeapon(true);
+
+        return temp;
     }
-
-    public void ActivateWeapon(bool Activate)
+    
+    //Called upon being to hit to inflict damage
+    public void Damage()
     {
-        if (Activate)
+        //Decrement health and check for death
+        health--;
+        if(health == 0)
         {
-            inCombat = true;
-            weaponSprCtrl.Activate(true);
-        }
-        else
-        {
-            inCombat = false;
-            weaponSprCtrl.Activate(false);
+            //TODO: Death and Restart Screen
         }
     }
 
+    //Collision Trigger Stay for sensing pickups
     private void OnTriggerStay2D(Collider2D collision)
     {
+        //If collided object is a pickup
         var obj = collision.gameObject;
         if(obj.tag == "Pickup")
         {
             var comp = obj.GetComponent<Pickup>();
             if (Input.GetKeyDown(KeyCode.F))
             {
+                //Change player to proper outfit and change pickup to previous outfit
                 if (comp.isDisguise)
                 {
                     var current = sprCtrl.GetCurrent();
@@ -260,21 +284,13 @@ public class Player : MonoBehaviour
                     comp.index = current;
                     comp.Switch();
                 }
+                //Activate weapon and destoy pickup
                 else
                 {
                     weapons.SetActive(comp.index);
                     Destroy(obj);
                 }
             }
-        }
-    }
-
-    public void Damage()
-    {
-        health--;
-        if(health == 0)
-        {
-            //TODO: Death and Restart Screen
         }
     }
 
@@ -285,4 +301,5 @@ public class Player : MonoBehaviour
             Damage();
         }
     }
+    #endregion
 }
