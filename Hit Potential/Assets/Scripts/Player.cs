@@ -7,7 +7,7 @@ public class Player : MonoBehaviour
     #region Variables
     [SerializeField] private float speed = 10;
     [SerializeField] private float knifeTimer = 0; 
-    [SerializeField] private float attackTimer = .75f; 
+    [SerializeField] private float attackTimer = 0; 
 
     [SerializeField] private Weapons weapons;
     [SerializeField] private SpriteController sprCtrl;
@@ -32,8 +32,8 @@ public class Player : MonoBehaviour
     private void Start()
     {
         //Check for first active weapon and equip it
-        if (weapons.IsActive(1)) { activeWeapon = 1; }
-        else if (weapons.IsActive(2)) { activeWeapon = 2; }
+        if (weapons.IsActive(0)) { activeWeapon = 0; }
+        else if (weapons.IsActive(1)) { activeWeapon = 1; }
     }
 
     void Update()
