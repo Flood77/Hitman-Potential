@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+
+    public GameManagerScript gameManager;
+    private bool isDead = false;
     #region Variables
     [SerializeField] private float speed = 10;
     [SerializeField] private float knifeTimer = 0; 
@@ -49,6 +52,10 @@ public class Player : MonoBehaviour
         {
             weaponHitBox.enabled = false;
         }
+
+        //Will set isDead to true and Open the UI for the gamemanager
+        //isDead = true
+        //gameManager.gameOver();
 
         //Call functions that take user input
         movement();
