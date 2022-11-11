@@ -32,15 +32,14 @@ public class Projectile : MonoBehaviour
         }
         
         //Damage player upon impact
-        if(collision.collider.tag == "Player")
+        else if(collision.collider.tag == "Player")
         {
             collision.gameObject.GetComponent<Player>().Damage();
 
             Destroy(gameObject);
         }
-
         //Damage wall on hit
-        if(collision.collider.tag == "Wall")
+        else if(collision.collider.tag == "Wall")
         {
             //Change Wall Sprite to show damage
             var spr = collision.gameObject.GetComponent<SpriteController>();

@@ -5,12 +5,13 @@ using UnityEngine;
 public class MeleeEnemy : Enemy
 {
     #region Variables
-    [SerializeField] private BoxCollider2D weaponHitBox;
-    [SerializeField] private Animation knifeSlash;
-    [SerializeField] private Animator knifeAnim;
+    [SerializeField] private float angle = 15;
+    [SerializeField] private int numRaycast = 6;
 
-    public float angle = 15;
-    public int numRaycast = 6;
+    [SerializeField] private Animator knifeAnim;
+    [SerializeField] private Animation knifeSlash;
+    [SerializeField] private BoxCollider2D weaponHitBox;
+
     #endregion
 
     //Returns a list of all GameObjects seen by the enemy
@@ -68,17 +69,14 @@ public class MeleeEnemy : Enemy
         var distance = Vector3.Distance(playerPosition, gameObject.transform.position);
 
         //If within distance then check timer
-        if (distance <= 0.1)
+        if (distance <= 0.1 && canAttack)
         {
-            if (canAttack)
-            {
-                //Reset timer, play animation, & enable collision
-                attackTimer = .75f;
-                weaponHitBox.enabled = true;
-                canAttack = false;
+            //Reset timer, play animation, & enable collision
+            attackTimer = .75f;
+            weaponHitBox.enabled = true;
+            canAttack = false;
 
-                knifeSlash.Play("EnemyKnifeSlice");
-            }
+            knifeSlash.Play("EnemyKnifeSlice");
         }
     }
 }

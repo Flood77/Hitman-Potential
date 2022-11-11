@@ -4,14 +4,12 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-
-    public GameManagerScript gameManager;
-    private bool isDead = false;
     #region Variables
     [SerializeField] private float speed = 10;
     [SerializeField] private float knifeTimer = 0; 
     [SerializeField] private float attackTimer = 0; 
 
+    [SerializeField] private GSystem system; 
     [SerializeField] private Weapons weapons;
     [SerializeField] private SpriteController sprCtrl;
     [SerializeField] private SpriteController weaponSprCtrl;
@@ -25,15 +23,21 @@ public class Player : MonoBehaviour
 
     //0 - base, 1 - mafia, 2 - police
     private int outfit = 0;
-    private int health = 3;
+    private int currentHealth;
+    private int health = 1;
     private int activeWeapon;
     private bool inCombat = false;
     private bool canAttack = false;
     //Implement Ammo
+
+    public string Health { get { return currentHealth + " / " + health; } }
     #endregion
 
     private void Start()
     {
+        //set starting health
+        currentHealth = health;
+
         //Check for first active weapon and equip it
         if (weapons.IsActive(0)) { activeWeapon = 0; }
         else if (weapons.IsActive(1)) { activeWeapon = 1; }
@@ -53,24 +57,20 @@ public class Player : MonoBehaviour
             weaponHitBox.enabled = false;
         }
 
-        //Will set isDead to true and Open the UI for the gamemanager
-        //isDead = true
-        //gameManager.gameOver();
-
         //Call functions that take user input
-        movement();
-        rotation();
-        changeWeapon();
+        Movement();
+        Rotation();
+        ChangeWeapon();
         if (Input.GetMouseButtonDown(0))
         {
-            attack();
+            Attack();
         }
 
     }
 
     #region Movement
     //Move player based on WASD controls
-    private void movement()
+    private void Movement()
     {
         //Move up
         if (Input.GetKey(KeyCode.W))
@@ -103,7 +103,7 @@ public class Player : MonoBehaviour
     }
 
     //Rotate player based on mouse position
-    private void rotation()
+    private void Rotation()
     {
         //Get mouseposition on the screen
         var mp = Input.mousePosition;
@@ -118,7 +118,7 @@ public class Player : MonoBehaviour
 
     #region Weapons
     //Attack based on currently selected weapon
-    private void attack()
+    private void Attack()
     {
         //Activate weapon if deactivated
         if(!inCombat)
@@ -160,7 +160,11 @@ public class Player : MonoBehaviour
                 //Sound wave if not silenced
                 if (activeWeapon != 1)
                 {
-                    //TODO: Implement Sound Wave on Audio Shot
+                    system.CreateSoundIndicator(this.gameObject, 3, true);
+                }
+                else
+                {
+                    system.CreateSoundIndicator(this.gameObject, 1, true);
                 }
             }
         }
@@ -182,7 +186,7 @@ public class Player : MonoBehaviour
     }
 
     //Change current weapon
-    private void changeWeapon()
+    private void ChangeWeapon()
     {
         var changed = false;
 
@@ -243,7 +247,7 @@ public class Player : MonoBehaviour
 
     #region External Dealings
     //Called by enemy when seen
-    public bool looksFriendly(bool isMafia)
+    public bool LooksFriendly(bool isMafia)
     {
         bool temp = false;
 
@@ -267,7 +271,7 @@ public class Player : MonoBehaviour
         health--;
         if(health == 0)
         {
-            //TODO: Death and Restart Screen
+            system.GameOver();
         }
     }
 
