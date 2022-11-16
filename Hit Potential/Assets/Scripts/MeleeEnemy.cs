@@ -47,10 +47,13 @@ public class MeleeEnemy : Enemy
     protected override void Timers()
     {
         //Adjust attackTimer and change canAttack accordingly
-        attackTimer -= Time.deltaTime;
-        if (attackTimer <= 0)
+        if (!canAttack)
         {
-            canAttack = true;
+            attackTimer -= Time.deltaTime;
+            if (attackTimer <= 0)
+            {
+                canAttack = true;
+            }
         }
 
         //Disable knife collision if animation is over
@@ -64,19 +67,22 @@ public class MeleeEnemy : Enemy
     //Check for and excute Enemy specific attack
     protected override void Attack()
     {
-        //Find distance between player and enemy
-        var playerPosition = new Vector3(nav.velocity.x, nav.velocity.y, 0);
-        var distance = Vector3.Distance(playerPosition, gameObject.transform.position);
-
-        //If within distance then check timer
-        if (distance <= 0.1 && canAttack)
+        if (canAttack)
         {
-            //Reset timer, play animation, & enable collision
-            attackTimer = .75f;
-            weaponHitBox.enabled = true;
-            canAttack = false;
+            //Find distance between player and enemy
+            var playerPosition = new Vector3(nav.velocity.x, nav.velocity.y, 0);
+            var distance = Vector3.Distance(playerPosition, gameObject.transform.position);
 
-            knifeSlash.Play("EnemyKnifeSlice");
+            //If within distance then check timer
+            if (distance <= 1)
+            {
+                //Reset timer, play animation, & enable collision
+                attackTimer = .75f;
+                weaponHitBox.enabled = true;
+                canAttack = false;
+
+                knifeSlash.Play();
+            }
         }
     }
 }

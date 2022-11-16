@@ -9,6 +9,7 @@ TagManager:
   - Corpse
   - Knife
   - Pickup
+  - Projectile
   layers:
   - Default
   - TransparentFX

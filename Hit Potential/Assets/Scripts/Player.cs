@@ -19,7 +19,6 @@ public class Player : MonoBehaviour
 
     [SerializeField] private GameObject Bullet;
     [SerializeField] private Animation knifeSlash;
-    [SerializeField] private Animator knifeAnim;
 
     //0 - base, 1 - mafia, 2 - police
     private int outfit = 0;
@@ -39,8 +38,16 @@ public class Player : MonoBehaviour
         currentHealth = health;
 
         //Check for first active weapon and equip it
-        if (weapons.IsActive(0)) { activeWeapon = 0; }
-        else if (weapons.IsActive(1)) { activeWeapon = 1; }
+        if (weapons.IsActive(0)) 
+        { 
+            activeWeapon = 0;
+            weaponSprCtrl.Switch(activeWeapon);
+        }
+        else if (weapons.IsActive(1)) 
+        { 
+            activeWeapon = 1;
+            weaponSprCtrl.Switch(activeWeapon);
+        }
     }
 
     void Update()
@@ -136,7 +143,7 @@ public class Player : MonoBehaviour
                 canAttack = false;
 
                 knifeTimer = .45f;
-                knifeSlash.Play();
+                knifeSlash.Play("PlayerSlash");
             }
         }
         //Shooting Logic
@@ -307,8 +314,10 @@ public class Player : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.tag == "EnemyKnife")
+        if (collision.tag == "EnemyKnife") Damage();
+        else if (collision.tag == "Projectile")
         {
+            Destroy(collision.gameObject);
             Damage();
         }
     }

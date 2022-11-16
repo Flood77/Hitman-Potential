@@ -30,14 +30,7 @@ public class Projectile : MonoBehaviour
 
             Destroy(gameObject);
         }
-        
-        //Damage player upon impact
-        else if(collision.collider.tag == "Player")
-        {
-            collision.gameObject.GetComponent<Player>().Damage();
 
-            Destroy(gameObject);
-        }
         //Damage wall on hit
         else if(collision.collider.tag == "Wall")
         {

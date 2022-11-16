@@ -27,14 +27,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 633880812585767023}
-  m_LocalRotation: {x: -0, y: -0, z: -0.69877756, w: 0.71533906}
+  m_LocalRotation: {x: 0, y: 0, z: -0.7071068, w: 0.7071068}
   m_LocalPosition: {x: 0.27, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 633880813965794915}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -88.658}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90}
 --- !u!212 &633880812585767017
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -96,7 +96,7 @@ Animation:
   m_GameObject: {fileID: 633880812585767023}
   m_Enabled: 1
   serializedVersion: 3
-  m_Animation: {fileID: 7400000, guid: 56dd8e3da8bd6514ba69a3f0f1391fc1, type: 2}
+  m_Animation: {fileID: 7400000, guid: e9ac33de35da64840a679f619f661f10, type: 2}
   m_Animations:
   - {fileID: 7400000, guid: 56dd8e3da8bd6514ba69a3f0f1391fc1, type: 2}
   m_WrapMode: 0
@@ -257,11 +257,11 @@ MonoBehaviour:
   nav: {fileID: 633880813965794943}
   node: {fileID: 0}
   deadBody: {fileID: 5373761846730766381, guid: 57b2a01d30cef9847855a2a2220051c2, type: 3}
-  weaponHitBox: {fileID: 633880812585767012}
-  knifeSlash: {fileID: 633880812585767019}
-  knifeAnim: {fileID: 633880812585767016}
   angle: 15
   numRaycast: 6
+  knifeAnim: {fileID: 633880812585767016}
+  knifeSlash: {fileID: 633880812585767019}
+  weaponHitBox: {fileID: 633880812585767012}
 --- !u!61 &633880813965794940
 BoxCollider2D:
   m_ObjectHideFlags: 0

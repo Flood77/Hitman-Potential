@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 939144125263075777}
   m_Layer: 0
   m_Name: Projectile
-  m_TagString: Untagged
+  m_TagString: Projectile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -99,8 +99,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75496e35e72c1164faac5fd35df29c20, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  friendly: 1
-  bullet: 1
   speed: 500
   fall: 2
   corpse: {fileID: 0}
@@ -124,7 +122,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.1, y: 0.1}
+    oldSize: {x: 0.128, y: 0.128}
     newSize: {x: 0.1, y: 0.1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0

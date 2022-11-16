@@ -58,7 +58,7 @@ public class RangedEnemy : Enemy
         var distance = Vector3.Distance(playerPosition, gameObject.transform.position);
 
         //If within distance then check timer
-        if (distance <= 1 && canAttack)
+        if (distance <= 12 && canAttack)
         {
             //Reset timer
             attackTimer = .25f;
