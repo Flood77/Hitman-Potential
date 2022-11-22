@@ -8,9 +8,11 @@ public class MeleeEnemy : Enemy
     [SerializeField] private float angle = 15;
     [SerializeField] private int numRaycast = 6;
 
-    [SerializeField] private Animator knifeAnim;
-    [SerializeField] private Animation knifeSlash;
+    [SerializeField] private Animator knifeSlash;
     [SerializeField] private BoxCollider2D weaponHitBox;
+
+    protected float knifeTimer;
+    private bool attacking = false;
 
     #endregion
 
@@ -56,12 +58,15 @@ public class MeleeEnemy : Enemy
             }
         }
 
-        //Disable knife collision if animation is over
-        if (!knifeAnim.GetCurrentAnimatorStateInfo(0).IsName("EnemyKnifeSlice"))
+        if (attacking)
         {
-            weaponHitBox.enabled = false;
+            knifeTimer -= Time.deltaTime;
+            if (knifeTimer <= 0)
+            {
+                weaponHitBox.enabled = false;
+                attacking = false;
+            }
         }
-
     }
 
     //Check for and excute Enemy specific attack
@@ -70,18 +75,20 @@ public class MeleeEnemy : Enemy
         if (canAttack)
         {
             //Find distance between player and enemy
-            var playerPosition = new Vector3(nav.velocity.x, nav.velocity.y, 0);
+            var playerPosition = new Vector3(nav.destination.x, nav.destination.y, 0); 
             var distance = Vector3.Distance(playerPosition, gameObject.transform.position);
 
             //If within distance then check timer
-            if (distance <= 1)
+            if (distance <= .75)
             {
                 //Reset timer, play animation, & enable collision
                 attackTimer = .75f;
                 weaponHitBox.enabled = true;
                 canAttack = false;
 
-                knifeSlash.Play();
+                attacking = true;
+                knifeTimer = .45f;
+                knifeSlash.SetTrigger("Attack");
             }
         }
     }

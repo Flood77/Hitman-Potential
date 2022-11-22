@@ -98,9 +98,9 @@ Animation:
   serializedVersion: 3
   m_Animation: {fileID: 7400000, guid: e9ac33de35da64840a679f619f661f10, type: 2}
   m_Animations:
-  - {fileID: 7400000, guid: 56dd8e3da8bd6514ba69a3f0f1391fc1, type: 2}
+  - {fileID: 7400000, guid: e9ac33de35da64840a679f619f661f10, type: 2}
   m_WrapMode: 0
-  m_PlayAutomatically: 1
+  m_PlayAutomatically: 0
   m_AnimatePhysics: 0
   m_CullingType: 0
 --- !u!95 &633880812585767016
@@ -259,8 +259,7 @@ MonoBehaviour:
   deadBody: {fileID: 5373761846730766381, guid: 57b2a01d30cef9847855a2a2220051c2, type: 3}
   angle: 15
   numRaycast: 6
-  knifeAnim: {fileID: 633880812585767016}
-  knifeSlash: {fileID: 633880812585767019}
+  knifeSlash: {fileID: 633880812585767016}
   weaponHitBox: {fileID: 633880812585767012}
 --- !u!61 &633880813965794940
 BoxCollider2D:

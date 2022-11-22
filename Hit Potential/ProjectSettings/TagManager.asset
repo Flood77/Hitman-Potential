@@ -10,6 +10,7 @@ TagManager:
   - Knife
   - Pickup
   - Projectile
+  - EnemyKnife
   layers:
   - Default
   - TransparentFX

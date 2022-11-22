@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class Player : MonoBehaviour
 {
@@ -9,7 +11,8 @@ public class Player : MonoBehaviour
     [SerializeField] private float knifeTimer = 0; 
     [SerializeField] private float attackTimer = 0; 
 
-    [SerializeField] private GSystem system; 
+    [SerializeField] private Tilemap walls;
+    [SerializeField] private GSystem system;
     [SerializeField] private Weapons weapons;
     [SerializeField] private SpriteController sprCtrl;
     [SerializeField] private SpriteController weaponSprCtrl;
@@ -18,7 +21,7 @@ public class Player : MonoBehaviour
     [SerializeField] private Transform[] shotgunBulletSpawn;
 
     [SerializeField] private GameObject Bullet;
-    [SerializeField] private Animation knifeSlash;
+    [SerializeField] private Animator knifeSlash;
 
     //0 - base, 1 - mafia, 2 - police
     private int outfit = 0;
@@ -27,6 +30,7 @@ public class Player : MonoBehaviour
     private int activeWeapon;
     private bool inCombat = false;
     private bool canAttack = false;
+    private bool attacking = false;
     //Implement Ammo
 
     public string Health { get { return currentHealth + " / " + health; } }
@@ -52,16 +56,25 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-        //Attack Timer and Knife Activation Timer
-        attackTimer -= Time.deltaTime;
-        knifeTimer -= Time.deltaTime;
-        if(attackTimer <= 0)
+        //Attack Cooldown Timer
+        if (!canAttack)
         {
-            canAttack = true;
+            attackTimer -= Time.deltaTime;
+            if(attackTimer <= 0)
+            {
+                canAttack = true;
+            }
         }
-        if(knifeTimer <= 0)
+
+        //Knife Collision Uptime Timer
+        if (attacking)
         {
-            weaponHitBox.enabled = false;
+            knifeTimer -= Time.deltaTime;
+            if (knifeTimer <= 0)
+            {
+                weaponHitBox.enabled = false;
+                attacking = false;
+            }
         }
 
         //Call functions that take user input
@@ -82,29 +95,105 @@ public class Player : MonoBehaviour
         //Move up
         if (Input.GetKey(KeyCode.W))
         {
+            //Take current position and cell position above player
             var temp = transform.position;
-            temp.y += speed;
+            var nextCell = (float)Math.Ceiling(temp.y);
+
+            //Check distance to the next cell
+            if (nextCell - temp.y <= 0.3)
+            {
+                //Check if next cell is a wall using its sprite
+                var cell = walls.WorldToCell(new Vector3(temp.x, nextCell, temp.z));
+                var sprite = walls.GetSprite(cell);
+                if (!sprite)
+                {
+                    temp.y += speed;
+                }
+            }
+            else
+            {
+                temp.y += speed;
+            }
+
+            //Set position to adjusted value
             transform.position = temp;
         }
         //Move down
         if (Input.GetKey(KeyCode.S))
         {
+            //Take current position and bottom of current cell
             var temp = transform.position;
-            temp.y -= speed;
+            var nextCell = (float)Math.Floor(temp.y);
+
+            //Check distance to the bottom of the cell
+            if (nextCell - temp.y >= -0.3)
+            {
+                //Check if next cell is a wall using its sprite
+                var cell = walls.WorldToCell(new Vector3(temp.x, nextCell - 1, temp.z));
+                var sprite = walls.GetSprite(cell);
+                if (!sprite)
+                {
+                    temp.y -= speed;
+                }
+            }
+            else
+            {
+                temp.y -= speed;
+            }
+
+            //Set position to adjusted value
             transform.position = temp;
         }
         //Move right
         if (Input.GetKey(KeyCode.D))
         {
+            //Take current position and cell position to the right of the player
             var temp = transform.position;
-            temp.x += speed;
+            var nextCell = (float)Math.Ceiling(temp.x);
+
+            //Check distance to the next cell
+            if (nextCell - temp.x <= 0.3)
+            {
+                //Check if next cell is a wall using its sprite
+                var cell = walls.WorldToCell(new Vector3(nextCell, temp.y, temp.z));
+                var sprite = walls.GetSprite(cell);
+                if (!sprite)
+                {
+                    temp.x += speed;
+                }
+            }
+            else
+            {
+                temp.x += speed;
+            }
+
+            //Set position to adjusted value
             transform.position = temp;
         }
         //Move left
         if (Input.GetKey(KeyCode.A))
         {
+            //Take current position and left wall of current cell
             var temp = transform.position;
-            temp.x -= speed;
+            var nextCell = (float)Math.Floor(temp.x);
+
+            //Check distance to the left wall of the cell
+            if (nextCell - temp.x >= -0.3)
+            {
+                //Check if next cell is a wall using its sprite
+                var cell = walls.WorldToCell(new Vector3(nextCell - 1, temp.y, temp.z));
+                var sprite = walls.GetSprite(cell);
+                if (!sprite)
+                {
+                    temp.x -= speed;
+                }
+            }
+            else
+            {
+                temp.x -= speed;
+            }
+
+            //Set position to adjusted value
             transform.position = temp;
         }
     }
@@ -142,8 +231,9 @@ public class Player : MonoBehaviour
                 weaponHitBox.enabled = true;
                 canAttack = false;
 
+                attacking = true;
                 knifeTimer = .45f;
-                knifeSlash.Play("PlayerSlash");
+                knifeSlash.SetTrigger("Attack");
             }
         }
         //Shooting Logic
