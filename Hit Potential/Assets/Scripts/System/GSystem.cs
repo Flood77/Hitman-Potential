@@ -6,16 +6,26 @@ using UnityEngine.SceneManagement;
 public class GSystem : MonoBehaviour
 {
     [SerializeField] private GameObject gameOverUI;
-    [SerializeField] private GameObject soundIndicator;  
+    [SerializeField] private GameObject soundIndicator;
+    [SerializeField] private GameObject pauseMenuUI;
+    [SerializeField] private Player player;
 
-    void Start()
-    {
-
-    }
+    private static bool gameIsPaused = false;
+    private GameObject currentPauseMenu;
 
     void Update()
     {
-
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            if (gameIsPaused)
+            {
+                MenuResume();
+            }
+            else
+            {
+                MenuPause();
+            }
+        }
     }
 
     //Create sound indicator objective
@@ -30,9 +40,26 @@ public class GSystem : MonoBehaviour
         }
     }
 
+    public void MenuPause()
+    {
+        currentPauseMenu = Instantiate(pauseMenuUI);
+        Time.timeScale = 0f;
+        gameIsPaused = true;
+        player.isPaused = true;
+    }
+
+    public void MenuResume()
+    {
+        Destroy(currentPauseMenu);
+        Time.timeScale = 1f;
+        gameIsPaused = false;
+        player.isPaused = false;
+    }
+
     //Load main menu
     public void MainMenu()
     {
+        Time.timeScale = 1f;
         SceneManager.LoadScene("MainMenu");
     }
 

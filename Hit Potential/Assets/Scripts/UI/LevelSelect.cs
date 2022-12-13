@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class LevelSelect : MonoBehaviour
 {
-    public GameObject LevelPreviewMenu;
+    public GameObject levelPreviewMenu;
 
     public void Level1Selected()
     {

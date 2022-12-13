@@ -109,7 +109,7 @@ RectTransform:
   m_Children:
   - {fileID: 1529801373475472189}
   m_Father: {fileID: 1529801372858979244}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
@@ -398,7 +398,7 @@ RectTransform:
   - {fileID: 1529801372162863571}
   - {fileID: 1529801371710956654}
   m_Father: {fileID: 1529801372858979244}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
@@ -658,7 +658,7 @@ RectTransform:
   - {fileID: 1529801373074137433}
   - {fileID: 1529801371667373988}
   m_Father: {fileID: 1529801372858979244}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
@@ -1354,7 +1354,7 @@ RectTransform:
   m_Children:
   - {fileID: 1529801372196729023}
   m_Father: {fileID: 1529801372858979244}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
@@ -1551,10 +1551,10 @@ RectTransform:
   m_Children:
   - {fileID: 1529801373078438266}
   - {fileID: 1529801373234394636}
-  - {fileID: 1529801371756505720}
   - {fileID: 1529801371886693649}
-  - {fileID: 1529801371698144833}
+  - {fileID: 1529801371756505720}
   - {fileID: 1529801372800067730}
+  - {fileID: 1529801371698144833}
   m_Father: {fileID: 1529801373485600160}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2348,7 +2348,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b39aa621a146504b83cc10320131965, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  LevelPreviewMenu: {fileID: 5912225340641871323, guid: bd5e6c0d783767245b880fe9acedabd8, type: 3}
+  levelPreviewMenu: {fileID: 0}
 --- !u!114 &1071361597
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2361,8 +2361,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 120faf6af4f99bd45bafc746149c5706, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mainMenu: {fileID: 6920237951623534415, guid: 5bcd03b45c50fde42bd77208a7102d96, type: 3}
-  levelSelectMenu: {fileID: 0}
+  previousMenu: {fileID: 0}
 --- !u!1 &1529801373475472188
 GameObject:
   m_ObjectHideFlags: 0

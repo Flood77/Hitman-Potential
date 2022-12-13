@@ -1956,6 +1956,73 @@ MonoBehaviour:
   m_Area: 0
   m_IgnoreFromBuild: 0
   m_AffectedAgents: ffffffff
+--- !u!1 &929213102
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 929213105}
+  - component: {fileID: 929213104}
+  - component: {fileID: 929213103}
+  m_Layer: 0
+  m_Name: EventSystem
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &929213103
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 929213102}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f231c4fb786f3946a6b90b886c48677, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_HorizontalAxis: Horizontal
+  m_VerticalAxis: Vertical
+  m_SubmitButton: Submit
+  m_CancelButton: Cancel
+  m_InputActionsPerSecond: 10
+  m_RepeatDelay: 0.5
+  m_ForceModuleActive: 0
+--- !u!114 &929213104
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 929213102}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76c392e42b5098c458856cdf6ecaaaa1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_FirstSelected: {fileID: 0}
+  m_sendNavigationEvents: 1
+  m_DragThreshold: 10
+--- !u!4 &929213105
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 929213102}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 11
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &943782649 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2983635457160043442, guid: e8c8c58ea19d0a940b5b44ebb5b722e1, type: 3}
@@ -2164,6 +2231,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1636694885266691358, guid: c4a2b95203281e548a501729b7eccf69, type: 3}
   m_PrefabInstance: {fileID: 1636694885749679091}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1512550181 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1636694885266691352, guid: c4a2b95203281e548a501729b7eccf69, type: 3}
+  m_PrefabInstance: {fileID: 1636694885749679091}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d07fec01180bd2b4abd3443dee1eb7d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1681653467
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2171,6 +2249,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1347247229, guid: ad7b171e8cf30bd4e95837b26fdbac28, type: 3}
+      propertyPath: pla
+      value: 
+      objectReference: {fileID: 1512550181}
     - target: {fileID: 1789103730851443601, guid: ad7b171e8cf30bd4e95837b26fdbac28, type: 3}
       propertyPath: m_Name
       value: GameManager
@@ -2219,6 +2301,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7779644404022453431, guid: ad7b171e8cf30bd4e95837b26fdbac28, type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 1512550181}
+    - target: {fileID: 7779644404022453431, guid: ad7b171e8cf30bd4e95837b26fdbac28, type: 3}
+      propertyPath: pauseMenuUI
+      value: 
+      objectReference: {fileID: 2755806749425033956, guid: f50fb36b2a83f1b40b31dcdd2cc84a3d, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ad7b171e8cf30bd4e95837b26fdbac28, type: 3}
 --- !u!1001 &1636694885749679091
@@ -2232,6 +2322,10 @@ PrefabInstance:
       propertyPath: walls
       value: 
       objectReference: {fileID: 593841489}
+    - target: {fileID: 1636694885266691352, guid: c4a2b95203281e548a501729b7eccf69, type: 3}
+      propertyPath: bullet
+      value: 
+      objectReference: {fileID: 3870067671889770649, guid: 9602af92fcb4ac246af2f448bba940f2, type: 3}
     - target: {fileID: 1636694885266691353, guid: c4a2b95203281e548a501729b7eccf69, type: 3}
       propertyPath: m_Name
       value: Player

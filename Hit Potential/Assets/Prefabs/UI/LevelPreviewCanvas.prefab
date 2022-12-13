@@ -31,7 +31,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5912225339450142891}
-  m_RootOrder: 6
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -168,7 +168,7 @@ RectTransform:
   m_Children:
   - {fileID: 5912225339353581231}
   m_Father: {fileID: 5912225339450142891}
-  m_RootOrder: 1
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
@@ -257,9 +257,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2893595290668081692}
-        m_TargetAssemblyTypeName: BackButton, Assembly-CSharp
-        m_MethodName: Back
+      - m_Target: {fileID: 3108966356996071723}
+        m_TargetAssemblyTypeName: UISelfDestruct, Assembly-CSharp
+        m_MethodName: SelfDestruct
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -937,12 +937,12 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5912225339228171966}
-  - {fileID: 5912225338555616002}
+  - {fileID: 139080304888783633}
   - {fileID: 5912225339291240690}
   - {fileID: 5912225339053400785}
   - {fileID: 5912225340076443604}
   - {fileID: 5912225339452364669}
-  - {fileID: 139080304888783633}
+  - {fileID: 5912225338555616002}
   m_Father: {fileID: 5912225340641871327}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1483,7 +1483,7 @@ GameObject:
   - component: {fileID: 5912225340641871321}
   - component: {fileID: 5912225340641871320}
   - component: {fileID: 4776687521083196975}
-  - component: {fileID: 2893595290668081692}
+  - component: {fileID: 3108966356996071723}
   m_Layer: 5
   m_Name: LevelPreviewCanvas
   m_TagString: Untagged
@@ -1585,7 +1585,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b388178329c293c4aa71b4a12991b872, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &2893595290668081692
+--- !u!114 &3108966356996071723
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1594,7 +1594,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 5912225340641871323}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 120faf6af4f99bd45bafc746149c5706, type: 3}
+  m_Script: {fileID: 11500000, guid: a21771cac2779304398f529a20730176, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  previousMenu: {fileID: 0}

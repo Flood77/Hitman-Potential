@@ -10,7 +10,6 @@ public class Player : MonoBehaviour
     [SerializeField] private float speed = 10;
     [SerializeField] private float knifeTimer = 0; 
     [SerializeField] private float attackTimer = 0;
-    [SerializeField] private bool isPaused = false;
 
     [SerializeField] private Tilemap walls;
     [SerializeField] private GSystem system;
@@ -32,6 +31,8 @@ public class Player : MonoBehaviour
     private bool canAttack = false;
     private bool attacking = false;
     //Implement Ammo
+
+    public bool isPaused = false;
 
     public string Health { get { return currentHealth + " / " + health; } }
     #endregion
@@ -56,7 +57,7 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-        if (isPaused)
+        if (!isPaused)
         {
             //Attack Cooldown Timer
             if (!canAttack)

@@ -10,10 +10,6 @@ public class SoundManager : MonoBehaviour
     [SerializeField] private AudioSource sfxSource;
     [SerializeField] private AudioMixer mixer;
 
-    public Slider masterSlider;
-    public Slider musicSlider;
-    public Slider sfxSlider;
-
     public void SetMasterVolume(float sliderValue)
     {
         mixer.SetFloat("MasterVolume", Mathf.Log10(sliderValue) * 20);

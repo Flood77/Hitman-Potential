@@ -6,6 +6,6 @@ public class UISelfDestruct : MonoBehaviour
 {
     public void SelfDestruct()
     {
-        Destroy(this);
+        Destroy(this.gameObject);
     }
 }
