@@ -9,6 +9,6 @@ public class LevelSelect : MonoBehaviour
     //Create Level Preview 
     public void Level1Selected()
     {
-        Instantiate<GameObject>(levelPreviewMenu);
+        Instantiate(levelPreviewMenu);
     }
 }

@@ -9,7 +9,7 @@ public class BackButton : MonoBehaviour
     //Destroy current menu and instantiate previous menu
     public void Back()
     {
-        Instantiate<GameObject>(previousMenu);
+        Instantiate(previousMenu);
 
         Destroy(this.gameObject);
     }

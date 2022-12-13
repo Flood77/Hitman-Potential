@@ -9,7 +9,8 @@ public class Player : MonoBehaviour
     #region Variables
     [SerializeField] private float speed = 10;
     [SerializeField] private float knifeTimer = 0; 
-    [SerializeField] private float attackTimer = 0; 
+    [SerializeField] private float attackTimer = 0;
+    [SerializeField] private bool isPaused = false;
 
     [SerializeField] private Tilemap walls;
     [SerializeField] private GSystem system;
@@ -19,7 +20,7 @@ public class Player : MonoBehaviour
     [SerializeField] private BoxCollider2D weaponHitBox;
     [SerializeField] private Transform pistolBulletSpawn;
 
-    [SerializeField] private GameObject Bullet;
+    [SerializeField] private GameObject bullet;
     [SerializeField] private Animator knifeSlash;
 
     //0 - base, 1 - mafia, 2 - police
@@ -55,36 +56,38 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-        //Attack Cooldown Timer
-        if (!canAttack)
+        if (isPaused)
         {
-            attackTimer -= Time.deltaTime;
-            if(attackTimer <= 0)
+            //Attack Cooldown Timer
+            if (!canAttack)
             {
-                canAttack = true;
+                attackTimer -= Time.deltaTime;
+                if (attackTimer <= 0)
+                {
+                    canAttack = true;
+                }
+            }
+
+            //Knife Collision Uptime Timer
+            if (attacking)
+            {
+                knifeTimer -= Time.deltaTime;
+                if (knifeTimer <= 0)
+                {
+                    weaponHitBox.enabled = false;
+                    attacking = false;
+                }
+            }
+
+            //Call functions that take user input
+            Movement();
+            Rotation();
+            ChangeWeapon();
+            if (Input.GetMouseButtonDown(0))
+            {
+                Attack();
             }
         }
-
-        //Knife Collision Uptime Timer
-        if (attacking)
-        {
-            knifeTimer -= Time.deltaTime;
-            if (knifeTimer <= 0)
-            {
-                weaponHitBox.enabled = false;
-                attacking = false;
-            }
-        }
-
-        //Call functions that take user input
-        Movement();
-        Rotation();
-        ChangeWeapon();
-        if (Input.GetMouseButtonDown(0))
-        {
-            Attack();
-        }
-
     }
 
     #region Movement
@@ -252,7 +255,7 @@ public class Player : MonoBehaviour
             else
             {
                 //Spawn bullet from spawn point
-                Instantiate(Bullet, pistolBulletSpawn.position, pistolBulletSpawn.rotation);
+                Instantiate(bullet, pistolBulletSpawn.position, pistolBulletSpawn.rotation);
 
                 //Sound wave if not silenced
                 if (activeWeapon != 1)
@@ -404,6 +407,7 @@ public class Player : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        //Check for collision with weapons
         if (collision.tag == "EnemyKnife") Damage();
         else if (collision.tag == "Projectile")
         {

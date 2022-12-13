@@ -52,7 +52,6 @@ public class RangedEnemy : Enemy
 
     protected override void Attack()
     {
-
         //Find distance between player and enemy
         var playerPosition = new Vector3(nav.velocity.x, nav.velocity.y, 0);
         var distance = Vector3.Distance(playerPosition, gameObject.transform.position);

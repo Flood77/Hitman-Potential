@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 public class GSystem : MonoBehaviour
 {
     [SerializeField] private GameObject gameOverUI;
-    [SerializeField] private GameObject SoundIndicator;  
+    [SerializeField] private GameObject soundIndicator;  
 
     void Start()
     {
@@ -21,10 +21,10 @@ public class GSystem : MonoBehaviour
     //Create sound indicator objective
     public void CreateSoundIndicator(GameObject parent, int size, bool fromPlayer)
     {
-        if (SoundIndicator)
+        if (soundIndicator)
         {
             //Instantiate object and set if it was made by player or not
-            var sound = Instantiate(SoundIndicator, parent.transform);
+            var sound = Instantiate(soundIndicator, parent.transform);
             sound.GetComponent<SoundIndicator>().fromPlayer = fromPlayer;
             Destroy(sound, size);
         }
