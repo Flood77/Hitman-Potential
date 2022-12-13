@@ -47,7 +47,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   LevelSelectMenu: {fileID: 1529801373462694010, guid: f932a7dbb06d68f4ab683180e7f312c1, type: 3}
   OpitionsMenu: {fileID: 7044090423013392577, guid: 86075c651c25ef94bbdbb32e863235b5, type: 3}
-  CreditsMenu: {fileID: 0}
+  CreditsMenu: {fileID: 6644789756314012838, guid: b9df3c06b2087074986f372fd71c5cb5, type: 3}
   HowToPlayMenu: {fileID: 0}
 --- !u!1001 &4420922865117167288
 PrefabInstance:

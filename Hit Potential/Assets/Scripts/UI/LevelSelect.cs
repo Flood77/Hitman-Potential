@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class LevelSelect : MonoBehaviour
 {
-    public GameObject LevelPreviewMenu;
+    [SerializeField] private GameObject levelPreviewMenu;
 
+    //Create Level Preview 
     public void Level1Selected()
     {
-        Instantiate<GameObject>(LevelPreviewMenu);
+        Instantiate<GameObject>(levelPreviewMenu);
     }
 }

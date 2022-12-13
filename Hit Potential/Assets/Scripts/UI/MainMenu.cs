@@ -5,43 +5,42 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
-    public GameObject LevelSelectMenu;
-    public GameObject OpitionsMenu;
-    public GameObject CreditsMenu;
-    public GameObject HowToPlayMenu;
+    [SerializeField] private GameObject levelSelectMenu;
+    [SerializeField] private GameObject optionsMenu;
+    [SerializeField] private GameObject creditsMenu;
+    [SerializeField] private GameObject howToPlayMenu;
+
+    //In the following functions, different UI elements are created
+    //based on the button selected and this UI object is deleted
     public void Play()
     {
-        //On play creates the the prefab of the UI level select object Assigned to the LevelSelectMenu GameObject
-        Instantiate<GameObject>(LevelSelectMenu);
+        Instantiate(levelSelectMenu);
 
         Destroy(this.gameObject);
-
-        //SceneManager.LoadScene("Level 1");
-        //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
-        //SceneManager.LoadScene("Insert Name of Scene");
     }
 
     public void HowtoPlay()
     {
-        Instantiate<GameObject>(HowToPlayMenu);
+        Instantiate(howToPlayMenu);
 
         Destroy(this.gameObject);
     }
 
     public void Options()
     {
-        Instantiate<GameObject>(OpitionsMenu);
+        Instantiate(optionsMenu);
 
         Destroy(this.gameObject);
     }
 
     public void Credits()
     {
-        Instantiate<GameObject>(CreditsMenu);
+        Instantiate(creditsMenu);
 
         Destroy(this.gameObject);
     }
 
+    //Quits the game, I think
     public void QuitGame()
     {
         Application.Quit();

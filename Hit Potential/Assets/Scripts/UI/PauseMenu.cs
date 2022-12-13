@@ -5,14 +5,15 @@ using UnityEngine.SceneManagement;
 
 public class PauseMenu : MonoBehaviour
 {
-    public static bool gameIsPaused = false;
+    [SerializeField] private GameObject pauseMenuUI;
+    [SerializeField] private GameObject optionsMenu;
 
-    public GameObject pauseMenuUI;
-    public GameObject optionsMenuObject;
-   
+    private static bool gameIsPaused = false;
+    private GameObject currentPauseMenu;
+
+    //Checks for player pausing game
     void Update()
     {
-        Debug.Log(Time.deltaTime);
         if (Input.GetKeyDown(KeyCode.P))
         {
             if (gameIsPaused)
@@ -26,23 +27,25 @@ public class PauseMenu : MonoBehaviour
         }
     }
 
+    //continue game time and destroy menu UI
     public void Resume()
     {
-        Instantiate<GameObject>(pauseMenuUI);
+        Destroy(currentPauseMenu);
         Time.timeScale = 1f;
         gameIsPaused = false;
     }
 
+    //stops game time, creates and stores menu ui
     public void Pause()
     {
-        Instantiate<GameObject>(pauseMenuUI);
+        currentPauseMenu = Instantiate(pauseMenuUI);
         Time.timeScale = 0f;
         gameIsPaused = true;
     }
 
     public void LoadOptionsMenu()
     {
-        Instantiate<GameObject>(optionsMenuObject);
+        Instantiate(optionsMenu);
     }
 
     public void LoadMainMenu()

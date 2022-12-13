@@ -6,27 +6,13 @@ using UnityEngine.Audio;
 
 public class SoundManager : MonoBehaviour
 {
-    public AudioSource musicSource;
-    public AudioSource sfxSource;
-
-    public AudioMixer mixer;
+    [SerializeField] private AudioSource musicSource;
+    [SerializeField] private AudioSource sfxSource;
+    [SerializeField] private AudioMixer mixer;
 
     public Slider masterSlider;
     public Slider musicSlider;
     public Slider sfxSlider;
-
-    private float musicVolume = 1f;
-    // Start is called before the first frame update
-    void Start()
-    {
-    
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
     public void SetMasterVolume(float sliderValue)
     {
