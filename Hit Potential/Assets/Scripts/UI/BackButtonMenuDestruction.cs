@@ -4,11 +4,21 @@ using UnityEngine;
 
 public class BackButtonMenuDestruction : MonoBehaviour
 {
-    public GameObject MainMenu;
+    public GameObject mainMenu;
+    public GameObject levelSelectMenu;
     public void Back()
     {
-        Instantiate<GameObject>(MainMenu);
+        Instantiate<GameObject>(mainMenu);
 
         Destroy(this.gameObject);
     }
+
+    public void XButtonLevelPreview()
+    {
+        Instantiate<GameObject>(levelSelectMenu);
+
+        Destroy(this.gameObject);
+    }
+
+
 }

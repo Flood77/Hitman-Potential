@@ -256,7 +256,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 5912225338555616000}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2893595290668081692}
+        m_TargetAssemblyTypeName: BackButtonMenuDestruction, Assembly-CSharp
+        m_MethodName: XButtonLevelPreview
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &5912225339053400784
 GameObject:
   m_ObjectHideFlags: 0
@@ -1098,7 +1110,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 5912225339452364659}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 4776687521083196975}
+        m_TargetAssemblyTypeName: LoadLevel, Assembly-CSharp
+        m_MethodName: LoadSelectedLevel
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &5912225339715191156
 GameObject:
   m_ObjectHideFlags: 0
@@ -1458,6 +1482,8 @@ GameObject:
   - component: {fileID: 5912225340641871326}
   - component: {fileID: 5912225340641871321}
   - component: {fileID: 5912225340641871320}
+  - component: {fileID: 4776687521083196975}
+  - component: {fileID: 2893595290668081692}
   m_Layer: 5
   m_Name: LevelPreviewCanvas
   m_TagString: Untagged
@@ -1547,3 +1573,29 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &4776687521083196975
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5912225340641871323}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b388178329c293c4aa71b4a12991b872, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2893595290668081692
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5912225340641871323}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 120faf6af4f99bd45bafc746149c5706, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mainMenu: {fileID: 0}
+  levelSelectMenu: {fileID: 0}

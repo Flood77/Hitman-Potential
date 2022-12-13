@@ -4,15 +4,10 @@ using UnityEngine;
 
 public class LevelSelect : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public GameObject LevelPreviewMenu;
 
-    // Update is called once per frame
-    void Update()
+    public void Level1Selected()
     {
-        
+        Instantiate<GameObject>(LevelPreviewMenu);
     }
 }
