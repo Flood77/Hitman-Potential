@@ -5,16 +5,17 @@ using UnityEngine.SceneManagement;
 
 public class PauseMenu : MonoBehaviour
 {
-    public static bool GameIsPaused = false;
+    public static bool gameIsPaused = false;
 
-    public GameObject PauseMenuUI;
+    public GameObject pauseMenuUI;
+    public GameObject optionsMenuObject;
    
     void Update()
     {
         Debug.Log(Time.deltaTime);
         if (Input.GetKeyDown(KeyCode.P))
         {
-            if (GameIsPaused)
+            if (gameIsPaused)
             {
                 Resume();
             }
@@ -27,22 +28,22 @@ public class PauseMenu : MonoBehaviour
 
     public void Resume()
     {
-        PauseMenuUI.SetActive(false);
+        Instantiate<GameObject>(pauseMenuUI);
         Time.timeScale = 1f;
-        GameIsPaused = false;
+        gameIsPaused = false;
     }
 
     public void Pause()
     {
-        PauseMenuUI.SetActive(true);
+        Instantiate<GameObject>(pauseMenuUI);
         Time.timeScale = 0f;
-        GameIsPaused = true;
+        gameIsPaused = true;
     }
 
-    //public void LoadOptionsMenu()
-    //{
-
-    //}
+    public void LoadOptionsMenu()
+    {
+        Instantiate<GameObject>(optionsMenuObject);
+    }
 
     public void LoadMainMenu()
     {
