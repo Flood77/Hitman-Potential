@@ -18,7 +18,6 @@ public class Player : MonoBehaviour
     [SerializeField] private SpriteController weaponSprCtrl;
     [SerializeField] private BoxCollider2D weaponHitBox;
     [SerializeField] private Transform pistolBulletSpawn;
-    [SerializeField] private Transform[] shotgunBulletSpawn;
 
     [SerializeField] private GameObject Bullet;
     [SerializeField] private Animator knifeSlash;
@@ -243,10 +242,11 @@ public class Player : MonoBehaviour
             if(activeWeapon == 3)
             {
                 //Spawn bullet for each spawn point
-                foreach(var a in shotgunBulletSpawn)
+                //TODO spawn bullets at different angles from bulletspawn
+                /*foreach(var a in shotgunBulletSpawn)
                 {
                     Instantiate(Bullet, a.position, a.rotation);
-                }
+                }*/
             }
             //Pistol Attack
             else
