@@ -4,11 +4,20 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Audio;
 
-public class SoundManager : MonoBehaviour
+public class SoundManager : Singleton<SoundManager>
 {
     [SerializeField] private AudioSource musicSource;
     [SerializeField] private AudioSource sfxSource;
     [SerializeField] private AudioMixer mixer;
+
+    private void Awake()
+    {
+        base.Awake();
+        if(Instance == this)
+        {
+            DontDestroyOnLoad(this);
+        }
+    }
 
     public void SetMasterVolume(float sliderValue)
     {

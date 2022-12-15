@@ -2348,7 +2348,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b39aa621a146504b83cc10320131965, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelPreviewMenu: {fileID: 0}
+  levelPreviewMenu: {fileID: 5912225340641871323, guid: bd5e6c0d783767245b880fe9acedabd8, type: 3}
 --- !u!114 &1071361597
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2361,7 +2361,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 120faf6af4f99bd45bafc746149c5706, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  previousMenu: {fileID: 0}
+  previousMenu: {fileID: 6724958553691666399, guid: ae7118797ed802c41bec17a1ca00ba48, type: 3}
 --- !u!1 &1529801373475472188
 GameObject:
   m_ObjectHideFlags: 0

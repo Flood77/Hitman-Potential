@@ -60,8 +60,9 @@ MonoBehaviour:
   weaponSprCtrl: {fileID: 1636694886976073238}
   weaponHitBox: {fileID: 1636694886976073237}
   pistolBulletSpawn: {fileID: 1636694886190005131}
-  Bullet: {fileID: 3870067671889770649, guid: 9602af92fcb4ac246af2f448bba940f2, type: 3}
+  bullet: {fileID: 3870067671889770649, guid: 9602af92fcb4ac246af2f448bba940f2, type: 3}
   knifeSlash: {fileID: 1636694886976073236}
+  isPaused: 0
 --- !u!114 &1636694885266691357
 MonoBehaviour:
   m_ObjectHideFlags: 0

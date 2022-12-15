@@ -2322,10 +2322,6 @@ PrefabInstance:
       propertyPath: walls
       value: 
       objectReference: {fileID: 593841489}
-    - target: {fileID: 1636694885266691352, guid: c4a2b95203281e548a501729b7eccf69, type: 3}
-      propertyPath: bullet
-      value: 
-      objectReference: {fileID: 3870067671889770649, guid: 9602af92fcb4ac246af2f448bba940f2, type: 3}
     - target: {fileID: 1636694885266691353, guid: c4a2b95203281e548a501729b7eccf69, type: 3}
       propertyPath: m_Name
       value: Player
