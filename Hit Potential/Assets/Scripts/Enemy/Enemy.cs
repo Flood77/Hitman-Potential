@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UIElements;
 
 public class Enemy : MonoBehaviour
 {
@@ -18,7 +19,12 @@ public class Enemy : MonoBehaviour
     [SerializeField] private float accelerationMax = 2;
     [SerializeField] protected float visionDistance = 5;
 
+    [SerializeField] private float angle = 15;
+    [SerializeField] private int numRaycast = 6;
+
     [SerializeField] protected NavMeshAgent nav;
+    [SerializeField] private EnemyAttack ea;
+    [SerializeField] private Movement move;
 
     [SerializeField] private Node node;
     [SerializeField] private GameObject deadBody;
@@ -26,8 +32,6 @@ public class Enemy : MonoBehaviour
     private float timer;
     private eState currentState;
     private Vector2 posDiff;
-    private Vector3 Velocity;
-    private Vector3 Acceleration;
 
     protected bool canAttack = false;
     protected float attackTimer;
@@ -94,9 +98,27 @@ public class Enemy : MonoBehaviour
                 transform.rotation = Quaternion.Euler(0f, 0f, Mathf.Atan2(nav.velocity.y, nav.velocity.x) * Mathf.Rad2Deg);
             }
 
-            //Run attack countdowns and attack logic
-            Timers();
-            Attack();
+            //Adjust attackTimer and change canAttack accordingly
+            ea.Timers();
+            if (!canAttack)
+            {
+                attackTimer -= Time.deltaTime;
+                if (attackTimer <= 0)
+                {
+                    canAttack = true;
+                }
+            }
+            else
+            {
+                //Find distance between player and enemy
+                var distance = Vector3.Distance(new Vector3(nav.velocity.x, nav.velocity.y, 0), gameObject.transform.position);
+
+                if (ea.Attack(distance))
+                {
+                    canAttack = false;
+                    attackTimer = ea.attackTimer;
+                }
+            }
 
             //Count down to Search mode
             if (player == null)
@@ -147,25 +169,6 @@ public class Enemy : MonoBehaviour
                 transform.rotation = Quaternion.Euler(0f, 0f, Mathf.Atan2(nav.velocity.y, nav.velocity.x) * Mathf.Rad2Deg);
             }
         }
-
-        //Manual Movement 
-        { 
-            /*
-            Velocity += Acceleration * ((currentState == eState.Follow) ? 1.0f : Time.deltaTime);
-            Velocity = Vector3.ClampMagnitude(Velocity, speedMax);
-            transform.position += Velocity * Time.deltaTime;
-
-            if (Velocity.normalized.magnitude > 0.1f)
-            {
-                if (currentState == eState.Patrol)
-                {
-                    transform.rotation = Quaternion.Euler(0f, 0f, Mathf.Atan2(Velocity.y, Velocity.x) * Mathf.Rad2Deg);
-                }
-            }
-
-            Acceleration = Vector3.zero;
-            */
-        }
     }
 
     //Navmesh Movement Processes
@@ -181,24 +184,36 @@ public class Enemy : MonoBehaviour
     {
         nav.isStopped = false;
     }
-
-    //Manual Movement Processes
-    public void ManualMoveTowards(Vector3 target)
-    {
-        Acceleration += (target - transform.position).normalized * accelerationMax;
-        Acceleration = Vector3.ClampMagnitude(Acceleration, accelerationMax);
-    }
-    public void ManualStop()
-    {
-        Velocity = Vector3.zero;
-    }
     #endregion
 
-    #region virtuals
-    protected virtual GameObject[] GetGameObjects() { return null; }
-    protected virtual void Attack() { }
-    protected virtual void Timers() { }
-    #endregion
+    //Returns a list of all GameObjects seen by the enemy
+    private GameObject[] GetGameObjects()
+    {
+        var gameObjects = new List<GameObject>();
+
+        //Produce raycasts through given values
+        var angleOffset = (angle * 2) / (numRaycast - 1);
+        for (int i = 0; i < numRaycast; i++)
+        {
+            //Adjust direction for needed rotation
+            var rotation = Quaternion.AngleAxis(-angle + (angleOffset * i), Vector3.forward);
+            Vector2 up = rotation * transform.right;
+
+            //Produce raycast in front of the enemy
+            var d = visionDistance;
+            var ray = Physics2D.Raycast(transform.position, up, visionDistance);
+            if (ray)
+            {
+                //Add gameobject to list if collided with raycast
+                d = ray.distance;
+                gameObjects.Add(ray.collider.gameObject);
+            }
+
+            Debug.DrawRay(transform.position, up * d, Color.red);
+        }
+
+        return gameObjects.ToArray();
+    }
 
     //Destroy enemy and make dead body
     public void Die()
@@ -206,7 +221,6 @@ public class Enemy : MonoBehaviour
         Instantiate(deadBody, this.transform.position, this.transform.rotation);
         Destroy(this.gameObject);
     }
-
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
