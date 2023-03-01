@@ -17,8 +17,14 @@ public class Node : MonoBehaviour
 			var n = enemy.Node;
 			if (n == this)
 			{
+				//Activate next Node
+				nextNode.gameObject.SetActive(true);
+
 				//Switch enemy's current objective node
 				enemy.Node = nextNode;
+
+				//Deactivate current Node
+				this.gameObject.SetActive(false);
 			}
 		}
 	}
