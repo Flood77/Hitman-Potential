@@ -68,12 +68,12 @@ public class Enemy : MonoBehaviour
                 corpse = g;
             }
         }
-        if (nav.isStopped) Resume();
 
         if (currentState == eState.Patrol)
         {
             //Follow nodes
             NavMoveTowards(node.transform.position);
+
             //Change state if finding player or corpse
             if (player != null)
             {
@@ -88,37 +88,9 @@ public class Enemy : MonoBehaviour
         }
         else if (currentState == eState.Follow)
         {
-            //Rotate to look at player
-            if (player != null)
-            {
-                NavMoveTowards(player.transform.position);
-                timer = 2;
-                lastSeenPosition = player.transform.position;
-                posDiff = player.transform.position - transform.position;
-                transform.rotation = Quaternion.Euler(0f, 0f, Mathf.Atan2(nav.velocity.y, nav.velocity.x) * Mathf.Rad2Deg);
-            }
+            FollowRotate(player);
 
-            //Adjust attackTimer and change canAttack accordingly
-            ea.Timers();
-            if (!canAttack)
-            {
-                attackTimer -= Time.deltaTime;
-                if (attackTimer <= 0)
-                {
-                    canAttack = true;
-                }
-            }
-            else
-            {
-                //Find distance between player and enemy
-                var distance = Vector3.Distance(new Vector3(nav.velocity.x, nav.velocity.y, 0), gameObject.transform.position);
-
-                if (ea.Attack(distance))
-                {
-                    canAttack = false;
-                    attackTimer = ea.attackTimer;
-                }
-            }
+            Attack();
 
             //Count down to Search mode
             if (player == null)
@@ -133,16 +105,7 @@ public class Enemy : MonoBehaviour
         }
         else if (currentState == eState.Search)
         {
-            //TODO: Fix yes...
-            var a = Random.Range(-180, 180);
-
-            //TODO: Fix Search Look Rotation to turn randomly
-
-            lastSeenPosition += posDiff;
-            var rot = Quaternion.Euler(0f, 0f, Mathf.Atan2(posDiff.y, posDiff.x) * Mathf.Rad2Deg);
-            rot.z += 45;
-            transform.rotation = rot;
-            NavMoveTowards(lastSeenPosition);
+            SearchRotate();
 
             timer -= Time.deltaTime;
             if(player != null)
@@ -153,11 +116,13 @@ public class Enemy : MonoBehaviour
             else if(timer <= 0)
             {
                 currentState = eState.Patrol;
+                Resume();
             }
         }
     }
-
+      
     #region Movement Logic
+    //Rotation Processes
     private void LateUpdate()
     {
         //Navmesh Rotation
@@ -169,6 +134,31 @@ public class Enemy : MonoBehaviour
                 transform.rotation = Quaternion.Euler(0f, 0f, Mathf.Atan2(nav.velocity.y, nav.velocity.x) * Mathf.Rad2Deg);
             }
         }
+    }
+    private void FollowRotate(GameObject player)
+    {
+        //Rotate to look at player
+        if (player != null)
+        {
+            NavMoveTowards(player.transform.position);
+            timer = 2;
+            lastSeenPosition = player.transform.position;
+            posDiff = player.transform.position - transform.position;
+            transform.rotation = Quaternion.Euler(0f, 0f, Mathf.Atan2(nav.velocity.y, nav.velocity.x) * Mathf.Rad2Deg);
+        }
+    }
+    private void SearchRotate()
+    {
+        //TODO: Fix yes...
+        var a = Random.Range(-180, 180);
+
+        //TODO: Fix Search Look Rotation to turn randomly
+
+        lastSeenPosition += posDiff;
+        var rot = Quaternion.Euler(0f, 0f, Mathf.Atan2(posDiff.y, posDiff.x) * Mathf.Rad2Deg);
+        rot.z += 45;
+        transform.rotation = rot;
+        NavMoveTowards(lastSeenPosition);
     }
 
     //Navmesh Movement Processes
@@ -186,6 +176,7 @@ public class Enemy : MonoBehaviour
     }
     #endregion
 
+    #region World Interaction
     //Returns a list of all GameObjects seen by the enemy
     private GameObject[] GetGameObjects()
     {
@@ -215,11 +206,30 @@ public class Enemy : MonoBehaviour
         return gameObjects.ToArray();
     }
 
-    //Destroy enemy and make dead body
-    public void Die()
+    //Runs all processes related to given EnemyAttack class
+    private void Attack()
     {
-        Instantiate(deadBody, this.transform.position, this.transform.rotation);
-        Destroy(this.gameObject);
+        //Adjust attackTimer and change canAttack accordingly
+        ea.Timers();
+        if (!canAttack)
+        {
+            attackTimer -= Time.deltaTime;
+            if (attackTimer <= 0)
+            {
+                canAttack = true;
+            }
+        }
+        else
+        {
+            //Find distance between player and enemy
+            var distance = Vector3.Distance(new Vector3(nav.velocity.x, nav.velocity.y, 0), gameObject.transform.position);
+
+            if (ea.Attack(distance))
+            {
+                canAttack = false;
+                attackTimer = ea.attackTimer;
+            }
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -235,5 +245,13 @@ public class Enemy : MonoBehaviour
             var playerMade = collision.gameObject.GetComponent<SoundIndicator>().fromPlayer;
 
         }
+    }
+    #endregion
+
+    //Destroy enemy and make dead body
+    public void Die()
+    {
+        Instantiate(deadBody, this.transform.position, this.transform.rotation);
+        Destroy(this.gameObject);
     }
 }
