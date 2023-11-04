@@ -10,7 +10,7 @@ public class SoundManager : Singleton<SoundManager>
     [SerializeField] private AudioSource sfxSource;
     [SerializeField] private AudioMixer mixer;
 
-    private void Awake()
+    public override void Awake()
     {
         base.Awake();
         if(Instance == this)

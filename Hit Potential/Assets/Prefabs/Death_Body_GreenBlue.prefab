@@ -125,7 +125,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.32, y: 0.32}
+    oldSize: {x: 0.6666667, y: 0.6666667}
     newSize: {x: 0.32, y: 0.32}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -146,4 +146,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20f48a0f0fe079247ada0e1fb6404f63, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  corpseClothes: {fileID: 7990382059547526933, guid: cea59e232ca88fd4f99a3abaef3a9e0c, type: 3}
+  clothes: {fileID: 0}
+  spriteRenderer: {fileID: 4801924579619089119}
+  a: {fileID: 0}

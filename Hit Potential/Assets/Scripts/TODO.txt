@@ -1,0 +1,23 @@
+﻿TODO??
+
+corpse 
+	write move logic
+player 
+	Decide how to represent carrying corpse
+	create iscarrying bool
+	disable attacking while carrying
+enemy 
+	add carrying detection
+
+	Implement accelerationMax???
+bullet
+	no hit wall??
+Input
+	move player input to proper file
+
+playerArt
+	change color to be separate object that overlaps
+
+pickups
+	fix to not be shit
+	move list to be held by system?
