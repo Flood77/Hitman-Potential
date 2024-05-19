@@ -9,7 +9,7 @@ public class Enemy : MonoBehaviour
     protected enum eState
     {
         Patrol,
-        Follow,
+        Attack,
         Search
     }
 
@@ -78,7 +78,7 @@ public class Enemy : MonoBehaviour
             if (player != null)
             {
                 NavStop();
-                currentState = eState.Follow;
+                currentState = eState.Attack;
             }
             else if (corpse != null)
             {
@@ -86,7 +86,7 @@ public class Enemy : MonoBehaviour
                 currentState = eState.Search;
             }
         }
-        else if (currentState == eState.Follow)
+        else if (currentState == eState.Attack)
         {
             FollowRotate(player);
 
@@ -111,7 +111,7 @@ public class Enemy : MonoBehaviour
             if(player != null)
             {
                 timer = 2;
-                currentState = eState.Follow;
+                currentState = eState.Attack;
             }
             else if(timer <= 0)
             {

@@ -7,7 +7,7 @@ using UnityEngine.Tilemaps;
 public class Player : MonoBehaviour
 {
     #region Variables
-    [SerializeField] private float speed = 10;
+    [SerializeField] private float speed = 3.5f;
     [SerializeField] private float knifeTimer = 0; 
     [SerializeField] private float attackTimer = 0;
 
@@ -17,20 +17,21 @@ public class Player : MonoBehaviour
     [SerializeField] private SpriteController sprCtrl;
     [SerializeField] private SpriteController weaponSprCtrl;
     [SerializeField] private BoxCollider2D weaponHitBox;
-    [SerializeField] private Transform pistolBulletSpawn;
+    [SerializeField] private Transform pistolBulletSpawn; // TODO change to array, so that shotgun can be implemented
 
     [SerializeField] private GameObject bullet;
     [SerializeField] private Animator knifeSlash;
 
-    //0 - base, 1 - mafia, 2 - police
+    //0 - base, 1 - mafia, 2 - police TODO change to enum class
     private int outfit = 0;
     private int currentHealth;
     private int health = 1;
     private int activeWeapon;
-    private bool inCombat = false;
+    private bool isArmed = false;
     private bool canAttack = false;
     private bool attacking = false;
-    //Implement Ammo
+    private GameObject hoveredObj = null;
+    //TODO Implement Ammo
 
     public bool isPaused = false;
 
@@ -64,13 +65,11 @@ public class Player : MonoBehaviour
             {
                 attackTimer -= Time.deltaTime;
                 if (attackTimer <= 0)
-                {
                     canAttack = true;
-                }
             }
 
-            //Knife Collision Uptime Timer
-            if (attacking)
+            // Knife Collision Uptime Timer
+            if (attacking && activeWeapon == 0)
             {
                 knifeTimer -= Time.deltaTime;
                 if (knifeTimer <= 0)
@@ -80,125 +79,74 @@ public class Player : MonoBehaviour
                 }
             }
 
-            //Call functions that take user input
-            Movement();
+            // Process user input
             Rotation();
-            ChangeWeapon();
-            if (Input.GetMouseButtonDown(0))
-            {
-                Attack();
-            }
+            if (Input.GetKey(KeyCode.W)) Move(true, true); // Move Up
+            if (Input.GetKey(KeyCode.S)) Move(true, false); // Move Down
+            if (Input.GetKey(KeyCode.D)) Move(false, true); // Move Right
+            if (Input.GetKey(KeyCode.A)) Move(false, false); // Move left
+
+            if (Input.GetKeyDown(KeyCode.Alpha1)) ChangeWeapon(0); // Change Weapon: Knife
+            else if (Input.GetKeyDown(KeyCode.Alpha2)) ChangeWeapon(1); // Change Weapon: Pistol
+            else if (Input.GetKeyDown(KeyCode.Alpha3)) ChangeWeapon(2); // Change Weapon: Silenced Pistol
+            else if (Input.GetKeyDown(KeyCode.Alpha4)) ChangeWeapon(3); // Change Weapon: Shotgun
+            else if (Input.GetKeyDown(KeyCode.E)) { } //TODO cycle through available weapons
+
+            if (Input.GetKey(KeyCode.R)) Reload(); // Reload Weapon
+            if (Input.GetKey(KeyCode.Q)) ActivateWeapon(false); // Put Away Weapon
+            if (Input.GetMouseButtonDown(0) && canAttack) Attack(); // Attack... Duh
+
+            if (Input.GetKeyDown(KeyCode.F) && hoveredObj) PickupHovered();
         }
     }
 
     #region Movement
-    //Move player based on WASD controls
-    private void Movement()
+    // Processes movement commands
+    private void Move(bool isVertical, bool isPositive)
     {
-        //Move up
-        if (Input.GetKey(KeyCode.W))
-        {
-            //Take current position and cell position above player
-            var temp = transform.position;
-            var nextCell = (float)Math.Ceiling(temp.y);
+        bool isUpdated = true;
+        var pos = transform.position;
+        var speedAdjustment = speed / ((isPositive) ? 1000 : -1000);
+        var currCell = (isVertical) ? ((isPositive) ? (float)Math.Ceiling(pos.y) : (float)Math.Floor(pos.y)) : 
+            ((isPositive) ? (float)Math.Ceiling(pos.x) : (float)Math.Floor(pos.x));
 
-            //Check distance to the next cell
-            if (nextCell - temp.y <= 0.3)
+        // Check if the player's relative position is moving toward a new cell
+        var relPos = currCell - ((isVertical) ? pos.y : pos.x);
+        if((isPositive && relPos <= 0.3) || (!isPositive && relPos >= -0.3))
+        {
+            // Get the coordinates for the next cell
+            Vector3 sub = new Vector3(0.0f, 0.0f, pos.z);
+            if (isVertical)
             {
-                //Check if next cell is a wall using its sprite
-                var cell = walls.WorldToCell(new Vector3(temp.x, nextCell, temp.z));
-                var sprite = walls.GetSprite(cell);
-                if (!sprite)
-                {
-                    temp.y += speed;
-                }
+                sub.y = ((isPositive) ? currCell : currCell - 1);
+                sub.x = pos.x;
             }
             else
             {
-                temp.y += speed;
+                sub.y = pos.y;
+                sub.x = ((isPositive) ? currCell : currCell - 1);
             }
 
-            //Set position to adjusted value
-            transform.position = temp;
+            // Check if the next cell is wall, if so don't move
+            var cell = walls.WorldToCell(sub);
+            var sprite = walls.GetSprite(cell);
+            if (sprite)
+            {
+                isUpdated = false;
+            }
         }
-        //Move down
-        if (Input.GetKey(KeyCode.S))
+
+        // Add the movement
+        if(isUpdated)
         {
-            //Take current position and bottom of current cell
-            var temp = transform.position;
-            var nextCell = (float)Math.Floor(temp.y);
-
-            //Check distance to the bottom of the cell
-            if (nextCell - temp.y >= -0.3)
-            {
-                //Check if next cell is a wall using its sprite
-                var cell = walls.WorldToCell(new Vector3(temp.x, nextCell - 1, temp.z));
-                var sprite = walls.GetSprite(cell);
-                if (!sprite)
-                {
-                    temp.y -= speed;
-                }
-            }
-            else
-            {
-                temp.y -= speed;
-            }
-
-            //Set position to adjusted value
-            transform.position = temp;
+            if (isVertical) 
+                pos.y += speedAdjustment;
+            else 
+                pos.x += speedAdjustment;
         }
-        //Move right
-        if (Input.GetKey(KeyCode.D))
-        {
-            //Take current position and cell position to the right of the player
-            var temp = transform.position;
-            var nextCell = (float)Math.Ceiling(temp.x);
 
-            //Check distance to the next cell
-            if (nextCell - temp.x <= 0.3)
-            {
-                //Check if next cell is a wall using its sprite
-                var cell = walls.WorldToCell(new Vector3(nextCell, temp.y, temp.z));
-                var sprite = walls.GetSprite(cell);
-                if (!sprite)
-                {
-                    temp.x += speed;
-                }
-            }
-            else
-            {
-                temp.x += speed;
-            }
-
-            //Set position to adjusted value
-            transform.position = temp;
-        }
-        //Move left
-        if (Input.GetKey(KeyCode.A))
-        {
-            //Take current position and left wall of current cell
-            var temp = transform.position;
-            var nextCell = (float)Math.Floor(temp.x);
-
-            //Check distance to the left wall of the cell
-            if (nextCell - temp.x >= -0.3)
-            {
-                //Check if next cell is a wall using its sprite
-                var cell = walls.WorldToCell(new Vector3(nextCell - 1, temp.y, temp.z));
-                var sprite = walls.GetSprite(cell);
-                if (!sprite)
-                {
-                    temp.x -= speed;
-                }
-            }
-            else
-            {
-                temp.x -= speed;
-            }
-
-            //Set position to adjusted value
-            transform.position = temp;
-        }
+        //Set position to adjusted value
+        transform.position = pos;
     }
 
     //Rotate player based on mouse position
@@ -220,29 +168,28 @@ public class Player : MonoBehaviour
     private void Attack()
     {
         //Activate weapon if deactivated
-        if(!inCombat)
+        if(!isArmed)
         {
             ActivateWeapon(true);
         }
-        //Knife Attack
+
+        // Knife Attack Logic
         if(activeWeapon == 0)
         {
-            if(canAttack)
-            {
-                //Reset Timer, enable collider, & play animation
-                attackTimer = .5f;
-                weaponHitBox.enabled = true;
-                canAttack = false;
+            // Set attack variables
+            attackTimer = .5f;
+            canAttack = false;
 
-                attacking = true;
-                knifeTimer = .45f;
-                knifeSlash.SetTrigger("Attack");
-            }
+            // Set specific variables
+            attacking = true;
+            knifeTimer = .45f;
+            weaponHitBox.enabled = true;
+            knifeSlash.SetTrigger("Attack");
         }
-        //Shooting Logic
+        // Shooting Logic
         else
         {
-            //Shotgun Attack
+            // Shotgun Attack
             if(activeWeapon == 3)
             {
                 //Spawn bullet for each spawn point
@@ -252,102 +199,52 @@ public class Player : MonoBehaviour
                     Instantiate(Bullet, a.position, a.rotation);
                 }*/
             }
-            //Pistol Attack
+            // Pistol Attack
             else
             {
                 //Spawn bullet from spawn point
                 Instantiate(bullet, pistolBulletSpawn.position, pistolBulletSpawn.rotation);
 
-                //Sound wave if not silenced
+                //TODO set canAttack and attackTimer
+
+                // Sound wave creation
                 if (activeWeapon != 1)
-                {
-                    system.CreateSoundIndicator(this.gameObject, 3, true);
-                }
+                    system.CreateSoundIndicator(this.gameObject, 3, true); // Not Silenced
                 else
-                {
-                    system.CreateSoundIndicator(this.gameObject, 1, true);
-                }
+                    system.CreateSoundIndicator(this.gameObject, 1, true); // Silenced
             }
         }
     }
 
-    //Enable/Disable weapon sprite
+    // Enable/Disable the weapon sprite and armed state
     public void ActivateWeapon(bool Activate)
     {
-        if (Activate)
-        {
-            inCombat = true;
-            weaponSprCtrl.Activate(true);
-        }
-        else
-        {
-            inCombat = false;
-            weaponSprCtrl.Activate(false);
-        }
+        isArmed = Activate;
+        weaponSprCtrl.Activate(Activate);
     }
 
     //Change current weapon
-    private void ChangeWeapon()
+    private void ChangeWeapon(int choice)
     {
-        var changed = false;
-
-        //Checks weapon if it is available, then set true
-        if (Input.GetKeyDown(KeyCode.Alpha1))
+        // Check if weapon choice is available
+        if(weapons.IsActive(choice))
         {
-            if (weapons.IsActive(0))
-            {
-                activeWeapon = 0;
-                changed = true;
-            }
-        }
-        else if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            if (weapons.IsActive(1))
-            {
-                activeWeapon = 1;
-                changed = true;
-            }
-        }
-        else if (Input.GetKeyDown(KeyCode.Alpha3))
-        {
-            if (weapons.IsActive(2))
-            {
-                activeWeapon = 2;
-                changed = true;
-            }
-        }
-        else if (Input.GetKeyDown(KeyCode.Alpha4))
-        {
-            if (weapons.IsActive(3))
-            {
-                activeWeapon = 3;
-                changed = true;
-            }
-        }
-
-        //Reload Weapon
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            //TODO: Implement Reloading Mechanics
-            //TODO: Add Reload Animation
-        }
-
-        //Put away weapons
-        if (Input.GetKey(KeyCode.R))
-        {
-            ActivateWeapon(false);
-        }
-
-        //Change combat sprite
-        if(changed)
-        {
+            // Set active weapon sprite
+            activeWeapon = choice;
             weaponSprCtrl.Switch(activeWeapon);
         }
+    }
+
+    private void Reload()
+    {
+        //TODO: Implement Reloading Mechanics
+        //TODO: Add Reload Animation
     }
     #endregion
 
     #region External Dealings
     //Called by enemy when seen
+    //TODO rework with new external faction enum
     public bool LooksFriendly(bool isMafia)
     {
         bool temp = false;
@@ -357,7 +254,7 @@ public class Player : MonoBehaviour
         else if (!isMafia && outfit == 2) temp = true;
 
         //Check if player weapon is out
-        if (inCombat) temp = false;
+        if (isArmed) temp = false;
         
         //Equip weapon if seen as enemy
         if(!temp) ActivateWeapon(true);
@@ -365,44 +262,35 @@ public class Player : MonoBehaviour
         return temp;
     }
     
-    //Called upon being to hit to inflict damage
-    public void Damage()
+    // Pickup Interaction
+    private void PickupHovered()
     {
-        //Decrement health and check for death
-        health--;
-        if(health == 0)
+        // Check if disguise or weapon
+        var comp = hoveredObj.GetComponent<Pickup>();
+        if (comp.IsDisguise)
         {
-            system.GameOver();
+            // Switch sprites
+            var current = sprCtrl.GetCurrent();
+            sprCtrl.Switch(comp.Index);
+            comp.Switch(current);
+        }
+        else
+        {
+            // Activate wepon choice
+            weapons.SetActive(comp.Index);
+            Destroy(hoveredObj);
+            hoveredObj = null;
         }
     }
 
-    //Collision Trigger Stay for sensing pickups
-    private void OnTriggerStay2D(Collider2D collision)
+    // Called upon being to hit to inflict damage
+    public void Damage()
     {
-        //If collided object is a pickup
-        var obj = collision.gameObject;
-        if(obj.tag == "Pickup")
+        // Decrement health and check for death
+        currentHealth--;
+        if(currentHealth == 0)
         {
-            var comp = obj.GetComponent<Pickup>();
-            if (Input.GetKeyDown(KeyCode.F))
-            {
-                //Change player to proper outfit and change pickup to previous outfit
-                if (comp.isDisguise)
-                {
-                    var current = sprCtrl.GetCurrent();
-
-                    sprCtrl.Switch(comp.index);
-
-                    comp.index = current;
-                    comp.Switch();
-                }
-                //Activate weapon and destoy pickup
-                else
-                {
-                    weapons.SetActive(comp.index);
-                    Destroy(obj);
-                }
-            }
+            system.GameOver();
         }
     }
 
@@ -414,6 +302,18 @@ public class Player : MonoBehaviour
         {
             Destroy(collision.gameObject);
             Damage();
+        }
+        else if (collision.tag == "Pickup")
+        {
+            hoveredObj = collision.gameObject;
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if(collision.tag == "Pickup")
+        {
+            hoveredObj = null;
         }
     }
     #endregion
